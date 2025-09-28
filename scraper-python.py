@@ -6,6 +6,7 @@ from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 import time
+import csv
 def scrape():
     # url = 'https://www.traderjoes.com/home/products/pdp/074953'
     # headers = {
@@ -23,10 +24,18 @@ def scrape():
     print("Entering Page")
     driver.get('https://www.traderjoes.com/home/products/category/products-2')
     time.sleep(3)
+    driver.refresh()
     res = []
-    i = 0
-    while i < 5:  
-        WebDriverWait(driver, 10).until(
+    WebDriverWait(driver, 15).until(
+        EC.presence_of_all_elements_located((By.CSS_SELECTOR, '.ProductCard_card__title__text__uiWLe a'))
+        )
+    page_source = BeautifulSoup(driver.page_source, 'html.parser')
+    last_page = page_source.select_one('[class="PaginationItem_paginationItem__2f87h Pagination_pagination__lastItem__3eYWw Pagination_pagination__lastItem_shown__mExTm Pagination_pagination__lastItem_shownMobile__3xfjl Pagination_pagination__lastItem_pagesSkipped__1wdCc Pagination_pagination__lastItem_pagesSkippedMobile__2K1Fx"]')
+    lastPageNum = int(last_page.get_text(strip=True)[4:])
+    print(lastPageNum)
+    i = 1
+    while i <= lastPageNum:   # 106 total pages # change to while there is a button to press
+        WebDriverWait(driver, 15).until(
             EC.presence_of_all_elements_located((By.CSS_SELECTOR, '.ProductCard_card__title__text__uiWLe a'))
         )
         print("Parsing Page: ", i)
@@ -37,8 +46,13 @@ def scrape():
         for x, y in zip(items, prices):
             res.append([x.text, y.text])
         # go to next page
-        next_button = driver.find_element(By.CSS_SELECTOR, '[class="Pagination_pagination__arrow__3TJf0 Pagination_pagination__arrow_side_right__9YUGr"]')
-        if i == 0:
+        if i == lastPageNum:
+            print("Reached Last Page. Dont need to go to next page.")
+            break
+        WebDriverWait(driver, 15).until(
+            EC.presence_of_all_elements_located((By.CSS_SELECTOR, '[class="Pagination_pagination__arrow__3TJf0 Pagination_pagination__arrow_side_right__9YUGr"]'))
+        )
+        if i == 1:
             time.sleep(5)
             print('Waiting for popup')
             popup_button = driver.find_element(By.CSS_SELECTOR, '[class="needsclick klaviyo-close-form go2324193863 kl-private-reset-css-Xuajs1"]')
@@ -47,10 +61,16 @@ def scrape():
             cookies_button = driver.find_element(By.CSS_SELECTOR, '[class="Button_button__3Me73 Button_button_variant_secondary__RwIii"]')
             cookies_button.click()
             time.sleep(2)
+        next_button = driver.find_element(By.CSS_SELECTOR, '[class="Pagination_pagination__arrow__3TJf0 Pagination_pagination__arrow_side_right__9YUGr"]')
         next_button.click()
         i += 1
     driver.quit()
-    print(res)
-    
+    with open("products.csv", "w", newline="", encoding="utf-8") as f:
+        writer = csv.writer(f)
+        
+        writer.writerow(["item_name", "item_price"])
+        
+        writer.writerows(res)
+    print("CSV file written successfully.")
 if __name__ == '__main__':
     scrape()
