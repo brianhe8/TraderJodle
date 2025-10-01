@@ -8,20 +8,13 @@ from selenium.webdriver.support import expected_conditions as EC
 import time
 import csv
 def scrape():
-    # url = 'https://www.traderjoes.com/home/products/pdp/074953'
-    # headers = {
-    #             'User-Agent':'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36'
-    #             }
-    # response = requests.get(url, headers=headers)
-    # print(response.status_code)
-    # print(response.url)
-    # soup = BeautifulSoup(response.text, 'html.parser')
     chrome_options = Options()
 
     chrome_options.add_experimental_option("detach", True)
     cService = webdriver.ChromeService(executable_path='/Users/brianhe/Desktop/chromedriver')
     driver = webdriver.Chrome(service = cService, options=chrome_options)
     print("Entering Page")
+    
     driver.get('https://www.traderjoes.com/home/products/category/products-2')
     time.sleep(3)
     driver.refresh()
@@ -43,8 +36,11 @@ def scrape():
         items = page_source.select('[class="ProductCard_card__title__text__uiWLe"] a ')
         print("Amount of items on page ",i,': ', len(items) )
         prices = page_source.select('[class="ProductPrice_productPrice__price__3-50j"]')
-        for x, y in zip(items, prices):
-            res.append([x.text, y.text])
+        images = page_source.select('[class="ProductCard_card__cover__19-g3"]')
+        for item, price, image in zip(items, prices, images):
+            img = image.get("srcoriginal")
+            imgURL = 'https://www.traderjoes.com' + img
+            res.append([item.text, price.text[1:], imgURL])
         # go to next page
         if i == lastPageNum:
             print("Reached Last Page. Dont need to go to next page.")
@@ -68,7 +64,7 @@ def scrape():
     with open("products.csv", "w", newline="", encoding="utf-8") as f:
         writer = csv.writer(f)
         
-        writer.writerow(["item_name", "item_price"])
+        writer.writerow(["item_name", "item_price", "item_image"])
         
         writer.writerows(res)
     print("CSV file written successfully.")
