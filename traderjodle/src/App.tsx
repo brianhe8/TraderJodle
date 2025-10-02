@@ -1,38 +1,41 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
-
-function App() {
-  const [count, setCount] = useState(0)
-
+import { useState } from "react";
+import viteLogo from "/vite.svg";
+import "./App.css";
+import Navbar from "./Navbar";
+import Footer from "./Footer";
+export default function Game() {
+  const [count, setCount] = useState(0);
+  // pull image from db
+  const item = {
+    name: "Peach flavored Glaze",
+    price: 3.99,
+    image:
+      "https://www.traderjoes.com/content/dam/trjo/products/m20405/81526.png",
+  };
+  function handleClick() {
+    setCount((count) => count + 1);
+  }
   return (
     <>
-      <div>
-        <header>
-          hello
-        </header>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
-}
+      <header>
+        <Navbar />
+      </header>
+      <div className="middle">
+        <h1>{item.name}</h1>
+        <img src={item.image} height="400px" className="item-image" />
 
-export default App
+        {/* Out of the Box stuff */}
+        <div className="card">
+          <button onClick={handleClick}>count is {count}</button>
+          <p>
+            Edit <code>src/App.tsx</code> and save to test HMR
+          </p>
+        </div>
+        {/* Out of the Box stuff */}
+      </div>
+      <footer>
+        <Footer />
+      </footer>
+    </>
+  );
+}

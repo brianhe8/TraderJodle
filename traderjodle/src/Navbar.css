@@ -1,0 +1,21 @@
+nav {
+  top: 0;
+  left: 0;
+  background-color: #646cffaa;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+ul {
+  display: flex;
+  list-style: none;
+  gap: 1rem;
+  margin: 0;
+  padding: 0;
+}
+.toplogo {
+  height: 40px;
+  padding: 1.5rem;
+  will-change: filter;
+  transition: filter 300ms;
+}
