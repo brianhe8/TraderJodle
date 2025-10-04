@@ -1,10 +1,9 @@
 import { useState } from "react";
-import viteLogo from "/vite.svg";
 import "./App.css";
 import Navbar from "./Navbar";
 import Footer from "./Footer";
 export default function Game() {
-  const [count, setCount] = useState(0);
+  const [guesses, setGuesses] = useState([]);
   // pull image from db
   const item = {
     name: "Peach flavored Glaze",
@@ -12,25 +11,32 @@ export default function Game() {
     image:
       "https://www.traderjoes.com/content/dam/trjo/products/m20405/81526.png",
   };
-  function handleClick() {
-    setCount((count) => count + 1);
-  }
+  const answer = item.price;
+
+  // function handleClick() {
+  //   setCount((count) => count + 1);
+  // }
   return (
     <>
       <header>
         <Navbar />
       </header>
       <div className="middle">
-        <h1>{item.name}</h1>
-        <img src={item.image} height="400px" className="item-image" />
-
-        {/* Out of the Box stuff */}
-        <div className="card">
-          <button onClick={handleClick}>count is {count}</button>
-          <p>
-            Edit <code>src/App.tsx</code> and save to test HMR
-          </p>
+        <h1>ANSWER: {answer}</h1>
+        <div className="item-container">
+          <div className="image-container">
+            <img src={item.image} height="400px" className="item-image" />
+          </div>
+          <div className="image-name-container">
+            <h1>{item.name}</h1>
+          </div>
         </div>
+        <div className="game-stats">Guess 1/6</div>
+        <div className="guesses-container">GUESSES HERE</div>
+        {/* Out of the Box stuff */}
+        {/* <div className="card">
+          <button onClick={handleClick}>count is {count}</button>
+        </div> */}
         {/* Out of the Box stuff */}
       </div>
       <footer>
