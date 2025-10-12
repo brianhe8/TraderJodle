@@ -1,11 +1,11 @@
 import "./Navbar.css";
-import TJlogo from "./assets/tjlogo.png";
+import TJlogo from "../assets/tjlogo.png";
 export default function Navbar() {
   return (
-    <nav>
+    <nav className="navbar">
       <img className="toplogo" src={TJlogo}></img>
-      Trader Jodle!
-      <ul>
+      <p className="title">Trader Jodle!</p>
+      <ul className="button-list">
         <li>
           <a href="https://costcodle.com/">costcodle</a>
         </li>

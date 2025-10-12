@@ -1,0 +1,29 @@
+@font-face {
+  font-family: "TJFont";
+  src: url("../assets/fonts/TraderJoes-JYrx.otf") format("opentype");
+}
+.navbar {
+  font-family: "TJFont", sans-serif;
+  background-color: #dfa06f;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: rgb(235, 39, 0);
+  flex-shrink: 0;
+}
+.title {
+  font-size: 60px;
+}
+.button-list {
+  display: flex;
+  list-style: none;
+  gap: 1rem;
+  margin: 0;
+  padding: 0;
+}
+.toplogo {
+  height: 40px;
+  padding: 1.5rem;
+  will-change: filter;
+  transition: filter 300ms;
+}

@@ -3,7 +3,7 @@ import "./Footer.css";
 export default function Footer() {
   return (
     <div className="Footer">
-      <p>test Here</p>
+      <p>Donate to me</p>
     </div>
   );
 }

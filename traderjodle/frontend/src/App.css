@@ -1,40 +1,40 @@
-:root {
+* {
+  margin: 0;
+  padding: 0;
+}
+body {
   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
   color-scheme: light dark;
-  background-color: #2ef2a0c7;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 #root {
-  margin: 0;
   line-height: 1.5;
   font-weight: 600;
-  /* padding: 2rem; */
   text-align: center;
-  /* display: flex; */
-  /* place-items: center; */
-  /* min-width: 320px;
-  min-height: 100vh; */
-  background-color: #e793cfde;
   color: #141035de;
+  background-color: #f94444; /* will show if header/game-area/footer not filling up entirety
+  /*fill entire screen */
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
-header {
-  color: aquamarine;
-  background-color: antiquewhite;
+.game-area {
+  background-image: url("./assets/TJBackground.webp");
+  background-size: cover;
+  background-attachment: fixed;
+  position: relative;
+  align-items: stretch;
+  flex: 1;
 }
-.middle {
-  background-color: #646cffaa;
-}
+
 .item-image {
-  background-color: #213547;
+  background-color: #ffffff;
   margin: 20px;
   padding: 10px;
   width: auto;
-}
-footer {
-  background-color: beige;
 }
 .logo:hover {
   filter: drop-shadow(0 0 2em #646cffaa);

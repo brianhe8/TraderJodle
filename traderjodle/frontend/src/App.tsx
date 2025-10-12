@@ -1,47 +1,89 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import "./App.css";
-import Navbar from "./Navbar";
-import Footer from "./Footer";
-export default function Game() {
-  const [guesses, setGuesses] = useState([]);
-  // pull image from db
-  const item = {
-    name: "Peach flavored Glaze",
-    price: 3.99,
-    image:
-      "https://www.traderjoes.com/content/dam/trjo/products/m20405/81526.png",
-  };
-  const answer = item.price;
+import Navbar from "./components/Navbar";
+import Footer from "./components/Footer";
+import LoadImage from "./assets/loading.jpg";
 
-  // function handleClick() {
-  //   setCount((count) => count + 1);
-  // }
+interface RealItem {
+  // prob useless?
+  id: number;
+  item_name: string;
+  item_price: string;
+  item_image: string;
+}
+interface Guess {
+  price_guess: number;
+  isHigher: boolean;
+  isWinner: boolean; // will see if this is necessary, might create winner function logic
+}
+export default function Game() {
+  const [guess, setGuess] = useState("");
+  const [itemName, setItemName] = useState<String>("");
+  const [itemSolution, setItemSolution] = useState<String>("");
+  const [itemImage, setItemImage] = useState<String>("");
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+
+  // Pulls item from DB
+  useEffect(() => {
+    async function fetchData() {
+      const data = await getData();
+      const obj = data[0];
+      setItemName(obj.item_name);
+      setItemSolution(obj.item_price);
+      setItemImage(obj.item_image);
+      setIsLoading(false);
+    }
+    try {
+      fetchData();
+    } catch {
+      console.error("Was not able to fetch data from database.");
+    }
+  }, []);
+  const handleGuess = (value: string) => {
+    setGuess(value);
+  };
   return (
     <>
       <header>
         <Navbar />
       </header>
-      <div className="middle">
-        <h1>ANSWER: {answer}</h1>
+      <div className="game-area">
+        <div className="item-price">
+          <h1>{isLoading ? "" : "Answer: " + itemSolution}</h1>
+        </div>
         <div className="item-container">
           <div className="image-container">
-            <img src={item.image} height="400px" className="item-image" />
+            <img
+              src={isLoading ? LoadImage : itemImage}
+              height="400px"
+              className="item-image"
+            />
           </div>
           <div className="image-name-container">
-            <h1>{item.name}</h1>
+            <h1>{isLoading ? "" : itemName}</h1>
           </div>
         </div>
         <div className="game-stats">Guess 1/6</div>
         <div className="guesses-container">GUESSES HERE</div>
-        {/* Out of the Box stuff */}
-        {/* <div className="card">
-          <button onClick={handleClick}>count is {count}</button>
-        </div> */}
-        {/* Out of the Box stuff */}
       </div>
       <footer>
         <Footer />
       </footer>
+    </>
+  );
+}
+
+async function getData(): Promise<RealItem[]> {
+  const response = await fetch("http://localhost:3000/items");
+  const data = await response.json();
+  return data;
+}
+function Error() {
+  return (
+    <>
+      <div className="error-container">
+        <h1>Loading Information</h1>
+      </div>
     </>
   );
 }
