@@ -12,7 +12,7 @@
   flex-shrink: 0;
 }
 .title {
-  font-size: 60px;
+  font-size: 5vh;
 }
 .button-list {
   display: flex;
