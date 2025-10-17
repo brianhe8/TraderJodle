@@ -1,24 +1,39 @@
 import React, { useState } from "react";
-
+// itemSolution should always be formatted correctly.
 function Guesses({ itemSolution }: { itemSolution: string }) {
     const [guess, setGuess] = useState<string>("");
-    const [history, setHistory] = useState<string[]>([]);
+    const [history, setHistory] = useState<
+        { value: string; direction: "up" | "down" | "correct" }[]
+    >([]);
     const [hasWon, setHasWon] = useState<boolean>(false);
     const [isError, setIsError] = useState<boolean>(false);
     const [errorMessage, setErrorMessage] = useState<string>("");
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        if (guess !== "" && !history.includes(guess)) {
+        // valid guess
+        if (guess !== "" && !history.some((entry) => entry.value === guess)) {
             console.log(history);
             setIsError(false);
-            if (guess === itemSolution) {
+            // format guess
+
+            // compare solution to guess
+            const numGuess = parseFloat(guess);
+            const numSolution = parseFloat(itemSolution);
+            let direction: "up" | "down" | "correct";
+
+            if (numGuess < numSolution) direction = "up";
+            else if (numGuess > numSolution) direction = "down";
+            else direction = "correct";
+            // update history
+            setHistory([...history, { value: guess, direction }]);
+            setGuess("");
+            // still want to add to History even if you win
+            if (direction === "correct") {
                 setHasWon(true);
                 console.log("You win!");
             }
-            setHistory([...history, guess]);
-            setGuess("");
         } else {
-            if (history.includes(guess)) {
+            if (history.some((entry) => entry.value === guess)) {
                 setErrorMessage("Already tried that price.");
             } else if (guess === "") {
                 setErrorMessage("Please enter a valid price.");
@@ -27,12 +42,12 @@ function Guesses({ itemSolution }: { itemSolution: string }) {
             setGuess("");
         }
     };
+    const formatGuess = () => {};
 
     // handles input into form
     // only allows 1 '.' and integers
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const value = e.target.value;
-        // Only allow digits and one dot
         const dotCount = value.split(".").length - 1;
         if (/^[0-9]*\.?[0-9]*$/.test(value) && dotCount <= 1) {
             setGuess(value);
@@ -43,7 +58,12 @@ function Guesses({ itemSolution }: { itemSolution: string }) {
             <h3>Your guesses:</h3>
             <ul>
                 {history.map((g, index) => (
-                    <li key={index}>{g}</li>
+                    <li key={index}>
+                        {" "}
+                        {g.value} {g.direction === "up" && "⬆️"}
+                        {g.direction === "down" && "⬇️"}
+                        {g.direction === "correct" && "✅"}
+                    </li>
                 ))}
             </ul>
             <form onSubmit={handleSubmit}>
