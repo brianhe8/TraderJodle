@@ -22,7 +22,9 @@ export default function Game() {
     const [itemSolution, setItemSolution] = useState<string>("");
     const [itemImage, setItemImage] = useState<string>("");
     const [isLoading, setIsLoading] = useState<boolean>(true);
-
+    const [currGuessCount, setCurrGuessCount] = useState<number>(1);
+    const [hasWon, setHasWon] = useState<boolean>(false);
+    const [isGameOver, setIsGameOver] = useState<boolean>(false);
     // Pulls item from DB
     useEffect(() => {
         async function fetchData() {
@@ -39,6 +41,17 @@ export default function Game() {
             console.error("Was not able to fetch data from database.");
         }
     }, []);
+
+    const handleGameInfoUpdate = (currGuessCount: number, hasWon: boolean) => {
+        setCurrGuessCount(currGuessCount);
+        let winChecker = currGuessCount;
+        if (currGuessCount === 7) {
+            setIsGameOver(true);
+            console.log("Game Over!");
+        }
+        console.log("Upper level Guess Count: ", currGuessCount);
+        setHasWon(hasWon);
+    };
     return (
         <>
             <header>
@@ -60,9 +73,19 @@ export default function Game() {
                         <p>{isLoading ? "" : itemName}</p>
                     </div>
                 </div>
-                <div className="game-stats">Guess 1/6</div>
+                <div className="game-stats">
+                    <p>Guess {currGuessCount}/6</p>
+                    <p>
+                        {hasWon
+                            ? "You win! The answer is: " + itemSolution
+                            : ""}
+                    </p>
+                </div>
                 <div className="guesses-container">
-                    <Guesses itemSolution={itemSolution} />
+                    <Guesses
+                        itemSolution={itemSolution}
+                        UpdateGameInfo={handleGameInfoUpdate}
+                    />
                 </div>
             </div>
             <footer>
