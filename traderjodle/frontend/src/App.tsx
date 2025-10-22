@@ -12,11 +12,6 @@ interface RealItem {
     item_price: string;
     item_image: string;
 }
-interface Guess {
-    price_guess: number;
-    isHigher: boolean;
-    isWinner: boolean; // will see if this is necessary, might create winner function logic
-}
 export default function Game() {
     const [itemName, setItemName] = useState<string>("");
     const [itemSolution, setItemSolution] = useState<string>("");
@@ -42,15 +37,19 @@ export default function Game() {
         }
     }, []);
 
-    const handleGameInfoUpdate = (currGuessCount: number, hasWon: boolean) => {
-        setCurrGuessCount(currGuessCount);
-        let winChecker = currGuessCount;
+    const handleGameInfoUpdate = (
+        currGuessCountTemp: number,
+        hasWonTemp: boolean
+    ) => {
+        setCurrGuessCount(currGuessCountTemp);
+        let winChecker = currGuessCountTemp;
         if (currGuessCount === 7) {
             setIsGameOver(true);
             console.log("Game Over!");
         }
-        console.log("Upper level Guess Count: ", currGuessCount);
-        setHasWon(hasWon);
+        console.log("Upper level hasWonTemp: ", hasWonTemp);
+        setHasWon(hasWonTemp);
+        console.log(hasWon);
     };
     return (
         <>

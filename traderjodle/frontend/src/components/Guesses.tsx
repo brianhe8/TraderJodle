@@ -9,7 +9,6 @@ function Guesses({ itemSolution, UpdateGameInfo }: GuessesProps) {
     const [history, setHistory] = useState<
         { value: string; direction: "up" | "down" | "correct" }[]
     >([]);
-    const [hasWon, setHasWon] = useState<boolean>(false);
     const [isError, setIsError] = useState<boolean>(false);
     const [errorMessage, setErrorMessage] = useState<string>("");
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -43,8 +42,10 @@ function Guesses({ itemSolution, UpdateGameInfo }: GuessesProps) {
             return newHistory;
         });
         // still want to add to History even if you win
+        let hasWon = false;
         if (direction === "correct") {
-            setHasWon(true);
+            hasWon = true;
+
             console.log("You win!");
         }
         setGuess("");
@@ -52,8 +53,9 @@ function Guesses({ itemSolution, UpdateGameInfo }: GuessesProps) {
         // pass up logic
         const buffer = 2;
         const roundsTemp = buffer + history.length;
-        const hasWonTemp = hasWon;
-        UpdateGameInfo(roundsTemp, hasWonTemp);
+        console.log("bottom level hasWonT before Update: ", hasWon);
+
+        UpdateGameInfo(roundsTemp, hasWon);
     };
     // checks for empty input or previously guessed input, else returns null
     const isValidSubmission = () => {
