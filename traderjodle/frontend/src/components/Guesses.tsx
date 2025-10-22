@@ -2,7 +2,7 @@ import React, { useState } from "react";
 // itemSolution should always be formatted correctly.
 interface GuessesProps {
     itemSolution: string;
-    UpdateGameInfo: (guessCount: number, hasWon: boolean) => void;
+    UpdateGameInfo: (roundsUpdate: number, hasWonUpdate: boolean) => void;
 }
 function Guesses({ itemSolution, UpdateGameInfo }: GuessesProps) {
     const [guess, setGuess] = useState<string>("");
@@ -11,9 +11,13 @@ function Guesses({ itemSolution, UpdateGameInfo }: GuessesProps) {
     >([]);
     const [isError, setIsError] = useState<boolean>(false);
     const [errorMessage, setErrorMessage] = useState<string>("");
+    let hasWonUpdate = false;
+    let roundsUpdate;
+    const buffer = 2;
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        const error = isValidSubmission();
+        const formattedGuess = formatGuess(guess);
+        const error = isValidSubmission(formattedGuess);
         if (error) {
             setErrorMessage(error);
             setIsError(true);
@@ -23,7 +27,6 @@ function Guesses({ itemSolution, UpdateGameInfo }: GuessesProps) {
         // valid guess
         setIsError(false);
         // format guess
-        const formattedGuess = formatGuess(guess);
         // compare solution to guess
         const numGuess = parseFloat(formattedGuess);
         const numSolution = parseFloat(itemSolution);
@@ -39,26 +42,23 @@ function Guesses({ itemSolution, UpdateGameInfo }: GuessesProps) {
                 ...prevHistory,
                 { value: formattedGuess, direction },
             ];
+            console.log(newHistory);
             return newHistory;
         });
         // still want to add to History even if you win
-        let hasWon = false;
         if (direction === "correct") {
-            hasWon = true;
-
-            console.log("You win!");
+            hasWonUpdate = true;
         }
         setGuess("");
 
         // pass up logic
-        const buffer = 2;
-        const roundsTemp = buffer + history.length;
-        console.log("bottom level hasWonT before Update: ", hasWon);
+        roundsUpdate = buffer + history.length;
+        console.log("bottom level hasWonT before Update: ", hasWonUpdate);
 
-        UpdateGameInfo(roundsTemp, hasWon);
+        UpdateGameInfo(roundsUpdate, hasWonUpdate);
     };
     // checks for empty input or previously guessed input, else returns null
-    const isValidSubmission = () => {
+    const isValidSubmission = (guess: string) => {
         if (guess === "") {
             return "Please enter a valid price.";
         } else if (history.some((entry) => entry.value === guess)) {
@@ -66,14 +66,12 @@ function Guesses({ itemSolution, UpdateGameInfo }: GuessesProps) {
         }
         return null;
     };
-    // handles visual of past guesses
-    // adds trailing 0's to cents section
-    // remove any leading zeros
     const formatGuess = (guess: string) => {
+        // handles visual of past guesses
+        // adds trailing 0's to cents section
+        // remove any leading zeros
         // parseInt removes trailing 0
-        console.log("OG Guess: ", guess);
         const numGuess = parseFloat(guess);
-        console.log("Numbered Guess: ", numGuess);
 
         // add a '.' if necessary
         let strGuess = numGuess.toString();
@@ -86,14 +84,13 @@ function Guesses({ itemSolution, UpdateGameInfo }: GuessesProps) {
             parts[1] = parts[1] + "0";
             strGuess = strGuess + "0";
         }
-        console.log("Formatted Guess: ", strGuess);
 
         return strGuess;
     };
-    // handles input into form
-    // only allows 1 '.' and integers
-    // only allows 2 digits in cents section
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        // handles input into form
+        // only allows 1 '.' and integers
+        // only allows 2 digits in cents section
         const value = e.target.value;
         if (!/^[0-9]*\.?[0-9]*$/.test(value)) return;
         const dotCount = value.split(".").length - 1;
@@ -124,8 +121,14 @@ function Guesses({ itemSolution, UpdateGameInfo }: GuessesProps) {
                     value={guess}
                     onChange={handleChange}
                     placeholder="0.00"
+                    disabled={hasWonUpdate || roundsUpdate === 7}
                 />
-                <button type="submit">Submit</button>
+                <button
+                    type="submit"
+                    disabled={hasWonUpdate || roundsUpdate === 7}
+                >
+                    Submit
+                </button>
             </form>
             <p className="error-message">{isError ? errorMessage : ""}</p>
         </>

@@ -17,7 +17,7 @@ export default function Game() {
     const [itemSolution, setItemSolution] = useState<string>("");
     const [itemImage, setItemImage] = useState<string>("");
     const [isLoading, setIsLoading] = useState<boolean>(true);
-    const [currGuessCount, setCurrGuessCount] = useState<number>(1);
+    const [guessesSubmitted, setGuessesSubmitted] = useState<number>(1);
     const [hasWon, setHasWon] = useState<boolean>(false);
     const [isGameOver, setIsGameOver] = useState<boolean>(false);
     // Pulls item from DB
@@ -38,18 +38,17 @@ export default function Game() {
     }, []);
 
     const handleGameInfoUpdate = (
-        currGuessCountTemp: number,
-        hasWonTemp: boolean
+        currGuessCountUpdate: number,
+        hasWonUpdate: boolean
     ) => {
-        setCurrGuessCount(currGuessCountTemp);
-        let winChecker = currGuessCountTemp;
-        if (currGuessCount === 7) {
+        setGuessesSubmitted(currGuessCountUpdate);
+        console.log("guessesSubmitted: ", guessesSubmitted);
+        if (guessesSubmitted === 6) {
             setIsGameOver(true);
             console.log("Game Over!");
         }
-        console.log("Upper level hasWonTemp: ", hasWonTemp);
-        setHasWon(hasWonTemp);
-        console.log(hasWon);
+        console.log("Upper level hasWonTemp: ", hasWonUpdate);
+        setHasWon(hasWonUpdate);
     };
     return (
         <>
@@ -73,12 +72,13 @@ export default function Game() {
                     </div>
                 </div>
                 <div className="game-stats">
-                    <p>Guess {currGuessCount}/6</p>
+                    <p>Guess {guessesSubmitted}/6</p>
                     <p>
                         {hasWon
                             ? "You win! The answer is: " + itemSolution
                             : ""}
                     </p>
+                    <p>{isGameOver && !hasWon ? "No More Guessing" : ""}</p>
                 </div>
                 <div className="guesses-container">
                     <Guesses
