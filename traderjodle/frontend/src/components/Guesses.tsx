@@ -12,7 +12,7 @@ function Guesses({ itemSolution, UpdateGameInfo }: GuessesProps) {
     const [isError, setIsError] = useState<boolean>(false);
     const [errorMessage, setErrorMessage] = useState<string>("");
     let hasWonUpdate = false;
-    let roundsUpdate;
+    let roundsUpdate = 0;
     const buffer = 2;
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -42,7 +42,6 @@ function Guesses({ itemSolution, UpdateGameInfo }: GuessesProps) {
                 ...prevHistory,
                 { value: formattedGuess, direction },
             ];
-            console.log(newHistory);
             return newHistory;
         });
         // still want to add to History even if you win
@@ -53,7 +52,7 @@ function Guesses({ itemSolution, UpdateGameInfo }: GuessesProps) {
 
         // pass up logic
         roundsUpdate = buffer + history.length;
-        console.log("bottom level hasWonT before Update: ", hasWonUpdate);
+        console.log("Guesses level hasWonUpdate before Update: ", hasWonUpdate);
 
         UpdateGameInfo(roundsUpdate, hasWonUpdate);
     };

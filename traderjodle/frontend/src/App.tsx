@@ -47,7 +47,7 @@ export default function Game() {
             setIsGameOver(true);
             console.log("Game Over!");
         }
-        console.log("Upper level hasWonTemp: ", hasWonUpdate);
+        // console.log("Upper level hasWonTemp: ", hasWonUpdate);
         setHasWon(hasWonUpdate);
     };
     return (
@@ -72,7 +72,11 @@ export default function Game() {
                     </div>
                 </div>
                 <div className="game-stats">
-                    <p>Guess {guessesSubmitted}/6</p>
+                    <p>
+                        {guessesSubmitted >= 7
+                            ? "Guess 6/6"
+                            : "Guess " + guessesSubmitted + "/6"}
+                    </p>
                     <p>
                         {hasWon
                             ? "You win! The answer is: " + itemSolution
