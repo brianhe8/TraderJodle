@@ -42,13 +42,16 @@ export default function Game() {
         hasWonUpdate: boolean
     ) => {
         setGuessesSubmitted(currGuessCountUpdate);
-        console.log("guessesSubmitted: ", guessesSubmitted);
+        // doesnt set guessesSubmitted until after handleGameInfoUpdate
+        console.log(3, "guessesSubmitted: ", guessesSubmitted);
         if (guessesSubmitted === 6) {
             setIsGameOver(true);
             console.log("Game Over!");
         }
         // console.log("Upper level hasWonTemp: ", hasWonUpdate);
-        setHasWon(hasWonUpdate);
+        console.log(4, hasWonUpdate);
+        setHasWon((hasWon) => hasWonUpdate);
+        console.log(5, hasWon);
     };
     return (
         <>

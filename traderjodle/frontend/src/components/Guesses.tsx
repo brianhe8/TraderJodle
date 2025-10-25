@@ -11,11 +11,11 @@ function Guesses({ itemSolution, UpdateGameInfo }: GuessesProps) {
     >([]);
     const [isError, setIsError] = useState<boolean>(false);
     const [errorMessage, setErrorMessage] = useState<string>("");
+    const [hasWon, setHasWon] = useState<boolean>(false);
     let hasWonUpdate = false;
-    let roundsUpdate = 0;
-    const buffer = 2;
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
+        // format guess
         const formattedGuess = formatGuess(guess);
         const error = isValidSubmission(formattedGuess);
         if (error) {
@@ -26,7 +26,6 @@ function Guesses({ itemSolution, UpdateGameInfo }: GuessesProps) {
         }
         // valid guess
         setIsError(false);
-        // format guess
         // compare solution to guess
         const numGuess = parseFloat(formattedGuess);
         const numSolution = parseFloat(itemSolution);
@@ -36,26 +35,24 @@ function Guesses({ itemSolution, UpdateGameInfo }: GuessesProps) {
         else direction = "correct";
 
         // update history
-        setHistory((prevHistory) => {
-            const newHistory = [
-                // sets to local variable and then sets it
-                ...prevHistory,
-                { value: formattedGuess, direction },
-            ];
-            return newHistory;
-        });
+        setHistory((h) => [...h, { value: formattedGuess, direction }]);
         // still want to add to History even if you win
         if (direction === "correct") {
             hasWonUpdate = true;
+            setHasWon((w) => !w);
+            console.log(-1, hasWon);
         }
         setGuess("");
-
+        console.log(0, hasWon);
         // pass up logic
-        roundsUpdate = buffer + history.length;
-        console.log("Guesses level roundsUpdate before Update: ", roundsUpdate);
-        console.log("Guesses level hasWonUpdate before Update: ", hasWonUpdate);
-
-        UpdateGameInfo(roundsUpdate, hasWonUpdate);
+        console.log(
+            1,
+            "Guesses level hasWonUpdate before Update: ",
+            hasWonUpdate
+        );
+        console.log(2, 2 + history.length);
+        UpdateGameInfo(2 + history.length, hasWonUpdate); // pass up local var, state for return
+        console.log(6);
     };
     // checks for empty input or previously guessed input, else returns null
     const isValidSubmission = (guess: string) => {
@@ -121,12 +118,12 @@ function Guesses({ itemSolution, UpdateGameInfo }: GuessesProps) {
                     value={guess}
                     onChange={handleChange}
                     placeholder="0.00"
-                    disabled={hasWonUpdate || roundsUpdate === 3}
+                    disabled={hasWon || 2 + history.length === 7}
                     autoComplete="off"
                 />
                 <button
                     type="submit"
-                    disabled={hasWonUpdate || roundsUpdate === 3}
+                    disabled={hasWon || 2 + history.length === 7}
                 >
                     Submit
                 </button>
