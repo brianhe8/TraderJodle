@@ -82,7 +82,11 @@ export default function Game() {
                             ? "You win! The answer is: " + itemSolution
                             : ""}
                     </p>
-                    <p>{isGameOver && !hasWon ? "No More Guessing" : ""}</p>
+                    <p>
+                        {isGameOver && !hasWon
+                            ? "You'll get it next time!"
+                            : ""}
+                    </p>
                 </div>
                 <div className="guesses-container">
                     <Guesses
