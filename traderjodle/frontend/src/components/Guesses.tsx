@@ -56,6 +56,8 @@ function Guesses({ itemSolution, UpdateGameInfo }: GuessesProps) {
     };
     // checks for empty input or previously guessed input, else returns null
     const isValidSubmission = (guess: string) => {
+        console.log("Checking submission");
+        console.log(guess);
         if (guess === "") {
             return "Please enter a valid price.";
         } else if (history.some((entry) => entry.value === guess)) {
@@ -67,6 +69,11 @@ function Guesses({ itemSolution, UpdateGameInfo }: GuessesProps) {
         // handles visual of past guesses
         // adds trailing 0's to cents section
         // remove any leading zeros
+
+        // have to check for empty string in this step
+        if (guess === "") {
+            return "";
+        }
         // parseInt removes trailing 0
         const numGuess = parseFloat(guess);
 
