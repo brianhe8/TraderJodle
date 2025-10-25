@@ -50,7 +50,7 @@ function Guesses({ itemSolution, UpdateGameInfo }: GuessesProps) {
             "Guesses level hasWonUpdate before Update: ",
             hasWonUpdate
         );
-        console.log(2, 2 + history.length);
+        console.log(2, "Current Guess Length: ", 2 + history.length);
         UpdateGameInfo(2 + history.length, hasWonUpdate); // pass up local var, state for return
         console.log(6);
     };
@@ -118,12 +118,12 @@ function Guesses({ itemSolution, UpdateGameInfo }: GuessesProps) {
                     value={guess}
                     onChange={handleChange}
                     placeholder="0.00"
-                    disabled={hasWon || 2 + history.length === 7}
+                    disabled={hasWon || 2 + history.length === 8}
                     autoComplete="off"
                 />
                 <button
                     type="submit"
-                    disabled={hasWon || 2 + history.length === 7}
+                    disabled={hasWon || 2 + history.length === 8}
                 >
                     Submit
                 </button>

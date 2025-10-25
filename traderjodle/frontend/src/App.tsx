@@ -41,6 +41,7 @@ export default function Game() {
         currGuessCountUpdate: number,
         hasWonUpdate: boolean
     ) => {
+        console.log("=====Updating Game Info=====");
         setGuessesSubmitted(currGuessCountUpdate);
         // doesnt set guessesSubmitted until after handleGameInfoUpdate
         console.log(3, "guessesSubmitted: ", guessesSubmitted);
@@ -52,6 +53,7 @@ export default function Game() {
         console.log(4, hasWonUpdate);
         setHasWon((hasWon) => hasWonUpdate);
         console.log(5, hasWon);
+        console.log("============================");
     };
     return (
         <>
