@@ -4,14 +4,19 @@ interface GuessesProps {
     itemSolution: string;
     UpdateGameInfo: (roundsUpdate: number, hasWonUpdate: boolean) => void;
 }
+type Guess = {
+    value: string | null;
+    direction: "up" | "down" | "correct" | null;
+};
 function Guesses({ itemSolution, UpdateGameInfo }: GuessesProps) {
     const [guess, setGuess] = useState<string>("");
-    const [history, setHistory] = useState<
-        { value: string; direction: "up" | "down" | "correct" }[]
-    >([]);
+    const [history, setHistory] = useState<Guess[]>(
+        Array(6).fill({ value: null, direction: null })
+    );
     const [isError, setIsError] = useState<boolean>(false);
     const [errorMessage, setErrorMessage] = useState<string>("");
     const [hasWon, setHasWon] = useState<boolean>(false);
+    const numGuesses = history.filter((g) => g.value !== null).length;
     let hasWonUpdate = false;
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -35,7 +40,14 @@ function Guesses({ itemSolution, UpdateGameInfo }: GuessesProps) {
         else direction = "correct";
 
         // update history
-        setHistory((h) => [...h, { value: formattedGuess, direction }]);
+        setHistory((prevHistory) => {
+            const updated = [...prevHistory];
+            const index = updated.findIndex((g) => g.value === null);
+            if (index !== -1) {
+                updated[index] = { value: formattedGuess, direction };
+            }
+            return updated;
+        });
         // still want to add to History even if you win
         if (direction === "correct") {
             hasWonUpdate = true;
@@ -51,7 +63,7 @@ function Guesses({ itemSolution, UpdateGameInfo }: GuessesProps) {
             hasWonUpdate
         );
         console.log(2, "Current Guess Length: ", 2 + history.length);
-        UpdateGameInfo(2 + history.length, hasWonUpdate); // pass up local var, state for return
+        UpdateGameInfo(2 + numGuesses, hasWonUpdate); // pass up local var, state for return
         console.log(6);
     };
     // checks for empty input or previously guessed input, else returns null
@@ -107,16 +119,19 @@ function Guesses({ itemSolution, UpdateGameInfo }: GuessesProps) {
     return (
         <>
             <h3>Your guesses:</h3>
-            <ul>
-                {history.map((g, index) => (
-                    <li key={index}>
-                        {" "}
-                        {g.value} {g.direction === "up" && "⬆️"}
-                        {g.direction === "down" && "⬇️"}
-                        {g.direction === "correct" && "✅"}
-                    </li>
+            <div className="grid grid-cols-2 gap-2">
+                {history.map((g, i) => (
+                    <div
+                        key={i}
+                        className="flex justify-between p-2 border rounded bg-gray-800 text-white"
+                    >
+                        <span>{g.value ?? "-"}</span>
+                        <span>{g.direction === "up" && "⬆️"}</span>
+                        <span>{g.direction === "down" && "⬇️"}</span>
+                        <span>{g.direction === "correct" && "✅"}</span>
+                    </div>
                 ))}
-            </ul>
+            </div>
             <form onSubmit={handleSubmit}>
                 <input
                     className="price-input"
@@ -125,13 +140,10 @@ function Guesses({ itemSolution, UpdateGameInfo }: GuessesProps) {
                     value={guess}
                     onChange={handleChange}
                     placeholder="0.00"
-                    disabled={hasWon || 2 + history.length === 8}
+                    disabled={hasWon || 2 + numGuesses === 8}
                     autoComplete="off"
                 />
-                <button
-                    type="submit"
-                    disabled={hasWon || 2 + history.length === 8}
-                >
+                <button type="submit" disabled={hasWon || 2 + numGuesses === 8}>
                     Submit
                 </button>
             </form>
