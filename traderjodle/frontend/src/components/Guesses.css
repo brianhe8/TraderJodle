@@ -1,3 +1,42 @@
+.grid-container {
+    display: flex;
+    flex-direction: column; /* sets guesses to be vertical*/
+    width: 300px; /* sets max width of grid container */
+    margin: 0 auto; /* centers guesses container */
+    gap: 10px;
+}
+
+/* Each row */
+.guess-value-box {
+    display: flex; /* allows value and direction cell to be flexed */
+    flex-direction: row;
+    align-items: center; /* centers content vertically */
+    overflow: hidden; /* hides value content if it goes past value box */
+    box-sizing: border-box; /* only applies if you set px to width */
+    gap: 5px;
+}
+.value-cell {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    flex: 5; /* width */
+    height: 40px;
+    border-radius: 5px;
+    padding-left: 20px;
+    background-color: gainsboro;
+    font-weight: bold;
+    box-shadow: inset 0 4px 8px rgba(0, 0, 0, 0.3), 0 4px 8px rgba(0, 0, 0, 0.2); /* outer */
+}
+.direction-cell {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex: 1; /* width */
+    height: 40px;
+    border-radius: 5px;
+    background-color: blanchedalmond;
+    box-shadow: inset 0 4px 8px rgba(0, 0, 0, 0.3), 0 4px 8px rgba(0, 0, 0, 0.2); /* outer */
+}
 .price-input {
     font-size: 1em;
 }

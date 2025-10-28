@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import "./Guesses.css";
 // itemSolution should always be formatted correctly.
 interface GuessesProps {
     itemSolution: string;
@@ -44,7 +45,7 @@ function Guesses({ itemSolution, UpdateGameInfo }: GuessesProps) {
             const updated = [...prevHistory];
             const index = updated.findIndex((g) => g.value === null);
             if (index !== -1) {
-                updated[index] = { value: formattedGuess, direction };
+                updated[index] = { value: "$" + formattedGuess, direction };
             }
             return updated;
         });
@@ -72,7 +73,7 @@ function Guesses({ itemSolution, UpdateGameInfo }: GuessesProps) {
         console.log(guess);
         if (guess === "") {
             return "Please enter a valid price.";
-        } else if (history.some((entry) => entry.value === guess)) {
+        } else if (history.some((entry) => entry.value === "$" + guess)) {
             return "Already tried that price.";
         }
         return null;
@@ -119,16 +120,16 @@ function Guesses({ itemSolution, UpdateGameInfo }: GuessesProps) {
     return (
         <>
             <h3>Your guesses:</h3>
-            <div className="grid grid-cols-2 gap-2">
+            <div className="grid-container">
                 {history.map((g, i) => (
-                    <div
-                        key={i}
-                        className="flex justify-between p-2 border rounded bg-gray-800 text-white"
-                    >
-                        <span>{g.value ?? "-"}</span>
-                        <span>{g.direction === "up" && "⬆️"}</span>
-                        <span>{g.direction === "down" && "⬇️"}</span>
-                        <span>{g.direction === "correct" && "✅"}</span>
+                    <div key={i} className="guess-value-box">
+                        <div className="value-cell">{g.value ?? ""}</div>
+
+                        <div className="direction-cell">
+                            {g.direction === "up" && "⬆️"}
+                            {g.direction === "down" && "⬇️"}
+                            {g.direction === "correct" && "✅"}
+                        </div>
                     </div>
                 ))}
             </div>
@@ -139,7 +140,7 @@ function Guesses({ itemSolution, UpdateGameInfo }: GuessesProps) {
                     name="guess"
                     value={guess}
                     onChange={handleChange}
-                    placeholder="0.00"
+                    placeholder="$0.00"
                     disabled={hasWon || 2 + numGuesses === 8}
                     autoComplete="off"
                 />
