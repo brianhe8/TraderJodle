@@ -1,29 +1,37 @@
 @font-face {
-  font-family: "TJFont";
-  src: url("../assets/fonts/TraderJoes-JYrx.otf") format("opentype");
+    font-family: "TJFont";
+    src: url("../assets/fonts/TraderJoes-JYrx.otf") format("opentype");
 }
 .navbar {
-  font-family: "TJFont", sans-serif;
-  background-color: #dfa06f;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  color: rgb(235, 39, 0);
-  flex-shrink: 0;
+    position: fixed;
+    top: 0;
+    left: 0;
+    font-family: "TJFont", sans-serif;
+
+    /* background-color: #dfa06f; */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: rgb(235, 39, 0);
+    flex-shrink: 0;
+    height: 60px;
+    z-index: 1000; /* keeps it above all other content */
+    width: 100vw;
+    /* border-bottom: 2px solid #dfa06f; the border you want to stay visible */
 }
 .title {
-  font-size: 5vh;
+    font-size: 32px;
 }
 .button-list {
-  display: flex;
-  list-style: none;
-  gap: 1rem;
-  margin: 0;
-  padding: 0;
+    display: flex;
+    list-style: none;
+    gap: 1rem;
+    margin: 0;
+    padding: 0;
 }
 .toplogo {
-  height: 40px;
-  padding: 1.5rem;
-  will-change: filter;
-  transition: filter 300ms;
+    height: 40px;
+    padding: 1.5rem;
+    will-change: filter;
+    transition: filter 300ms;
 }

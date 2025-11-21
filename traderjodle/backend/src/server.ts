@@ -1,7 +1,8 @@
-import express, { type Request, type Response } from "express";
-import dotenv from "dotenv";
-import { Pool } from "pg";
-import cors from "cors";
+import express, { type Request, type Response } from 'express';
+import dotenv from 'dotenv';
+import { Pool } from 'pg';
+import cors from 'cors';
+import path from 'path';
 
 // import * as express from "express";
 // import { Request, Response } from "express";
@@ -20,10 +21,10 @@ const pool = new Pool({
 // Test connection
 pool.connect()
     .then((client) => {
-        console.log("Connected to PostgreSQL");
+        console.log('Connected to PostgreSQL');
         client.release(); // must release back to pool
     })
-    .catch((err) => console.error("Connection error", err.stack));
+    .catch((err) => console.error('Connection error', err.stack));
 
 // export default pool; only use if diff file
 const startDate = new Date(2025, 9, 6);
@@ -35,34 +36,34 @@ function getGameIDIndex() {
     let dayDiff = timeDiff / (1000 * 3600 * 24);
     return Math.ceil(dayDiff);
 }
-console.log("Start Date: " + startDate);
-console.log("Current Date: " + currDate);
+console.log('Start Date: ' + startDate);
+console.log('Current Date: ' + currDate);
 
-console.log("Game Item Index: " + getGameIDIndex());
+console.log('Game Item Index: ' + getGameIDIndex());
 gameID = getGameIDIndex().toString();
 const app = express();
 app.use(cors());
-app.get("/", (req: Request, res: Response) => {
-    res.send("server is running just fine!");
+app.get('/', (req: Request, res: Response) => {
+    res.send('server is running just fine!');
 });
 export default app;
 
-app.get("/test", (req: Request, res: Response) => {
-    res.send("testing here!");
+app.get('/test', (req: Request, res: Response) => {
+    res.send('testing here!');
 });
 
-app.get("/items", async (req: Request, res: Response) => {
+app.get('/items', async (req: Request, res: Response) => {
     try {
         const result = await pool.query(
-            "SELECT * FROM items WHERE id = " + gameID
+            'SELECT * FROM items WHERE id = ' + gameID
         );
         res.json(result.rows);
     } catch (err: unknown) {
         if (err instanceof Error) {
-            console.error("database error: ", err.message);
+            console.error('database error: ', err.message);
         } else {
-            console.error("unexpected error: ", err);
+            console.error('unexpected error: ', err);
         }
-        res.status(500).send("Server error");
+        res.status(500).send('Server error');
     }
 });

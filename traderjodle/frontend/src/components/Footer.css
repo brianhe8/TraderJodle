@@ -1,5 +1,10 @@
 .Footer {
-  background-color: #dfa06f;
-  flex-shrink: 0;
-  height: 40px;
+    position: fixed;
+    background-color: #dfa06f;
+    flex-shrink: 0;
+    bottom: 0;
+    left: 0;
+    height: 30px;
+    z-index: 1000;
+    width: 100%;
 }

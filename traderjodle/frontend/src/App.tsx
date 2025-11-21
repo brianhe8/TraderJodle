@@ -63,14 +63,14 @@ export default function Game() {
                 <Navbar />
             </header>
             <div className="game-area">
-                <div className="item-price">
+                {/* <div className="item-price">
                     <h1>{isLoading ? "" : "Answer: " + itemSolution}</h1>
-                </div>
+                </div> */}
                 <div className="item-container">
-                    <div className="image-container">
+                    <div className="item-image-container">
                         <img
                             src={isLoading ? LoadImage : itemImage}
-                            height="400px"
+                            height="300px"
                             className="item-image"
                         />
                     </div>
