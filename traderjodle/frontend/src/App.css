@@ -17,6 +17,7 @@ body {
     display: flex;
     flex-direction: column;
     /* min-height: 100vh; */
+    overflow-y: hidden;
 }
 /* #root {
     font-weight: 600;
@@ -45,7 +46,8 @@ body {
     width: fit-content;
     height: fit-content;
     margin: 0 auto;
-    padding: 5px 20px 20px 20px;
+    margin-top: 5px;
+    padding: 5px 20px 10px 20px;
     display: flex;
     flex-direction: column;
     justify-content: center;

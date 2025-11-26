@@ -119,7 +119,7 @@ function Guesses({ itemSolution, UpdateGameInfo }: GuessesProps) {
     };
     return (
         <>
-            <h3>Your guesses:</h3>
+            {/* <h3>Your guesses:</h3> */}
             <div className="grid-container">
                 {history.map((g, i) => (
                     <div key={i} className="guess-value-box">
