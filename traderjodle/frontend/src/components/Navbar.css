@@ -12,7 +12,7 @@
     align-items: center;
     color: rgb(235, 39, 0);
     flex-shrink: 0;
-    height: 60px;
+    height: 50px;
     z-index: 1;
     width: 100%;
     border-bottom: 2px solid #dfa06f;
@@ -26,8 +26,14 @@
     gap: 1rem;
     margin: 0;
     padding: 0;
+    font-weight: 100;
+    color: #646cff;
+    text-decoration: inherit;
 }
-.toplogo { 
+.button-list:hover {
+    color: #4086ff;
+}
+.toplogo {
     height: 40px;
     padding: 1.5rem;
     will-change: filter;

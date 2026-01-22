@@ -3,7 +3,7 @@ import './App.css';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import Guesses from './components/Guesses';
-import LoadImage from './assets/loading.jpg';
+// import LoadImage from './assets/loading.jpg';
 
 interface RealItem {
     id: number;
@@ -38,7 +38,7 @@ export default function Game() {
 
     const handleGameInfoUpdate = (
         currGuessCountUpdate: number,
-        hasWonUpdate: boolean
+        hasWonUpdate: boolean,
     ) => {
         console.log('=====Updating Game Info=====');
         if (!hasWonUpdate) {
@@ -68,7 +68,7 @@ export default function Game() {
                 <div className="item-container">
                     <div className="item-image-container">
                         <img
-                            src={isLoading ? LoadImage : itemImage}
+                            src={isLoading ? 'hello' : itemImage}
                             height="300px"
                             className="item-image"
                         />
