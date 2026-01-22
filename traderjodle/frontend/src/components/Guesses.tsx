@@ -8,15 +8,17 @@ interface GuessesProps {
 type Guess = {
     value: string | null;
     direction: 'up' | 'down' | 'correct' | null;
+    flipped: boolean;
 };
 function Guesses({ itemSolution, UpdateGameInfo }: GuessesProps) {
     const [guess, setGuess] = useState<string>('');
     const [history, setHistory] = useState<Guess[]>(
-        Array(6).fill({ value: null, direction: null })
+        Array(6).fill({ value: null, direction: null, flipped: false })
     );
     const [isError, setIsError] = useState<boolean>(false);
     const [errorMessage, setErrorMessage] = useState<string>('');
     const [hasWon, setHasWon] = useState<boolean>(false);
+    const [flipIndex, setFlipIndex] = useState<number | null>(null);
     const numGuesses = history.filter((g) => g.value !== null).length;
     let hasWonUpdate = false;
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -35,25 +37,39 @@ function Guesses({ itemSolution, UpdateGameInfo }: GuessesProps) {
         // compare solution to guess
         const numGuess = parseFloat(formattedGuess);
         const numSolution = parseFloat(itemSolution);
-        let direction: 'up' | 'down' | 'correct';
-        if (numGuess < numSolution) direction = 'up';
-        else if (numGuess > numSolution) direction = 'down';
-        else direction = 'correct';
+        let guessDirection: 'up' | 'down' | 'correct';
+        if (numGuess < numSolution) guessDirection = 'up';
+        else if (numGuess > numSolution) guessDirection = 'down';
+        else guessDirection = 'correct';
 
         // update history
         setHistory((prevHistory) => {
             const updated = [...prevHistory];
             const index = updated.findIndex((g) => g.value === null);
             if (index !== -1) {
-                updated[index] = { value: '$' + formattedGuess, direction };
+                updated[index] = {
+                    value: '$' + formattedGuess,
+                    direction: guessDirection,
+                    flipped: false,
+                };
+
+                setFlipIndex(index);
+
+                setTimeout(() => {
+                    setHistory((prevHistory) => {
+                        const updated = [...prevHistory];
+                        if (updated[index]) updated[index].flipped = true;
+                        return updated;
+                    });
+                }, 600); // match CSS flip animation time to be .6 sec
             }
             return updated;
         });
         // still want to add to History even if you win
-        if (direction === 'correct') {
+        if (guessDirection === 'correct') {
             hasWonUpdate = true;
             setHasWon((w) => !w);
-            console.log(-1, hasWon);
+            console.log(-1, hasWon); //would still be false... hasWon changes after handleSubmit
         }
         setGuess('');
         console.log(0, hasWon);
@@ -61,9 +77,10 @@ function Guesses({ itemSolution, UpdateGameInfo }: GuessesProps) {
         console.log(
             1,
             'Guesses level hasWonUpdate before Update: ',
-            hasWonUpdate
+            hasWonUpdate //local variable will instantly change
         );
-        console.log(2, 'Current Guess Length: ', 2 + history.length);
+        // const count = history.filter((g) => g.value !== null).length;
+        // console.log(2, 'Current Guess Length: ', console.log(count));
         UpdateGameInfo(2 + numGuesses, hasWonUpdate); // pass up local var, state for return
         console.log(6);
     };
@@ -123,13 +140,25 @@ function Guesses({ itemSolution, UpdateGameInfo }: GuessesProps) {
             <div className="grid-container">
                 {history.map((g, i) => (
                     <div key={i} className="guess-value-box">
-                        <div className="value-cell">{g.value ?? ''}</div>
-
-                        <div className="direction-cell">
-                            {g.direction === 'up' && '⬆️'}
-                            {g.direction === 'down' && '⬇️'}
-                            {g.direction === 'correct' && '✅'}
+                        <div className="flip-front">
+                            <div className="value-cell">{g.value ?? ''}</div>
+                            <div className="direction-cell">
+                                {g.direction === 'up' && '⬆️'}
+                                {g.direction === 'down' && '⬇️'}
+                                {g.direction === 'correct' && '✅'}
+                            </div>
                         </div>
+                        {/*
+                            <div className="flip-back">
+                                <div className="value-cell">
+                                    {g.value ?? ''}
+                                </div>
+                                <div className="direction-cell">
+                                    {g.direction === 'up' && '⬆️'}
+                                    {g.direction === 'down' && '⬇️'}
+                                    {g.direction === 'correct' && '✅'}
+                                </div>
+                            </div> */}
                     </div>
                 ))}
             </div>
@@ -147,6 +176,7 @@ function Guesses({ itemSolution, UpdateGameInfo }: GuessesProps) {
                     />
                     <button
                         type="submit"
+                        className="submit-button"
                         disabled={hasWon || 2 + numGuesses === 8}
                     >
                         Submit

@@ -6,7 +6,7 @@ import Guesses from './components/Guesses';
 // import LoadImage from './assets/loading.jpg';
 
 interface RealItem {
-    id: number;
+    // id: number;
     item_name: string;
     item_price: string;
     item_image: string;
@@ -15,24 +15,25 @@ export default function Game() {
     const [itemName, setItemName] = useState<string>('');
     const [itemSolution, setItemSolution] = useState<string>('');
     const [itemImage, setItemImage] = useState<string>('');
-    const [isLoading, setIsLoading] = useState<boolean>(true);
     const [guessesSubmitted, setGuessesSubmitted] = useState<number>(1);
     const [hasWon, setHasWon] = useState<boolean>(false);
     const [isGameOver, setIsGameOver] = useState<boolean>(false);
+    const [isLoading, setIsLoading] = useState<boolean>(true);
     // Pulls item from DB
     useEffect(() => {
-        async function fetchData() {
-            const data = await getData();
-            const obj = data[0];
-            setItemName(obj.item_name);
-            setItemSolution(obj.item_price);
-            setItemImage(obj.item_image);
-            setIsLoading(false);
-        }
+        setIsLoading(true);
         try {
+            async function fetchData() {
+                const item = await getData();
+                setItemName(item.item_name);
+                setItemSolution(item.item_price);
+                setItemImage(item.item_image);
+            }
             fetchData();
         } catch {
             console.error('Was not able to fetch data from database.');
+        } finally {
+            setIsLoading(false);
         }
     }, []);
 
@@ -68,7 +69,7 @@ export default function Game() {
                 <div className="item-container">
                     <div className="item-image-container">
                         <img
-                            src={isLoading ? 'hello' : itemImage}
+                            src={isLoading ? undefined : itemImage}
                             height="300px"
                             className="item-image"
                         />
@@ -108,11 +109,22 @@ export default function Game() {
     );
 }
 
-async function getData(): Promise<RealItem[]> {
-    const response = await fetch('http://localhost:3000/items');
+// returns object of day's index taken from products.json
+async function getData(): Promise<RealItem> {
+    const response = await fetch('/data/products.json');
+
     const data = await response.json();
-    return data;
+    const startDate = new Date(2025, 9, 6);
+    let currDate = new Date();
+    let timeDiff = currDate.getTime() - startDate.getTime();
+    let dayDiff = timeDiff / (1000 * 3600 * 24);
+    console.log('Start Date: ' + startDate);
+    let index = Math.ceil(dayDiff) % data.length;
+    console.log(index);
+    console.log(data[index]);
+    return data[index];
 }
+
 function Error() {
     return (
         <>
