@@ -1,4 +1,4 @@
-import './Navbar.css';
+import '../styles/Navbar.css';
 import TJlogo from '../assets/tjlogo.png';
 export default function Navbar() {
     return (

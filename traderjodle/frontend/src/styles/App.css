@@ -11,7 +11,7 @@ body {
     font-weight: 600;
     text-align: center;
     color: #141035de;
-    background-image: url('./assets/TJBackground.webp');
+    background-image: url('../assets/TJBackground.webp');
     background-size: cover;
     background-attachment: fixed;
     display: flex;

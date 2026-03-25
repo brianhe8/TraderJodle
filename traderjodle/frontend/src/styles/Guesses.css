@@ -34,7 +34,8 @@
     padding-left: 15px;
     background-color: gainsboro;
     font-weight: bold;
-    box-shadow: inset 0px 0px 5px rgba(0, 0, 0, 30%),
+    box-shadow:
+        inset 0px 0px 5px rgba(0, 0, 0, 30%),
         3px 5px 3px rgba(0, 0, 0, 20%); /* outer */
 }
 .value-cell.hover {
@@ -52,7 +53,8 @@
     height: 35px;
     border-radius: 5px;
     background-color: blanchedalmond;
-    box-shadow: inset 0px 0pc 5px rgba(0, 0, 0, 30%),
+    box-shadow:
+        inset 0px 0pc 5px rgba(0, 0, 0, 30%),
         3px 5px 3px rgba(0, 0, 0, 20%);
 }
 .input-submit-container {
@@ -72,7 +74,9 @@
     font-family: inherit;
     background-color: #ffffff;
     cursor: pointer;
-    transition: border-color 0.25s, transform 3s 3s ease;
+    transition:
+        border-color 0.25s,
+        transform 3s 3s ease;
 }
 .submit-button:hover {
     /* Second state of button*/

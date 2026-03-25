@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import './App.css';
+import './styles/App.css';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import Guesses from './components/Guesses';
@@ -53,7 +53,7 @@ export default function Game() {
         }
         // console.log("Upper level hasWonTemp: ", hasWonUpdate);
         console.log(4, hasWonUpdate);
-        setHasWon((hasWon) => hasWonUpdate);
+        // setHasWon((hasWon) => hasWonUpdate);
         console.log(5, hasWon);
         console.log('============================');
     };
@@ -123,14 +123,4 @@ async function getData(): Promise<RealItem> {
     console.log(index);
     console.log(data[index]);
     return data[index];
-}
-
-function Error() {
-    return (
-        <>
-            <div className="error-container">
-                <h1>Loading Information</h1>
-            </div>
-        </>
-    );
 }

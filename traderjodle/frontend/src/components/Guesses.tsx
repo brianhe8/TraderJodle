@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import './Guesses.css';
+import '../styles/Guesses.css';
 // itemSolution should always be formatted correctly.
 interface GuessesProps {
     itemSolution: string;
@@ -13,12 +13,12 @@ type Guess = {
 function Guesses({ itemSolution, UpdateGameInfo }: GuessesProps) {
     const [guess, setGuess] = useState<string>('');
     const [history, setHistory] = useState<Guess[]>(
-        Array(6).fill({ value: null, direction: null, flipped: false })
+        Array(6).fill({ value: null, direction: null, flipped: false }),
     );
     const [isError, setIsError] = useState<boolean>(false);
     const [errorMessage, setErrorMessage] = useState<string>('');
     const [hasWon, setHasWon] = useState<boolean>(false);
-    const [flipIndex, setFlipIndex] = useState<number | null>(null);
+    const [, setFlipIndex] = useState<number | null>(null);
     const numGuesses = history.filter((g) => g.value !== null).length;
     let hasWonUpdate = false;
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -77,7 +77,7 @@ function Guesses({ itemSolution, UpdateGameInfo }: GuessesProps) {
         console.log(
             1,
             'Guesses level hasWonUpdate before Update: ',
-            hasWonUpdate //local variable will instantly change
+            hasWonUpdate, //local variable will instantly change
         );
         // const count = history.filter((g) => g.value !== null).length;
         // console.log(2, 'Current Guess Length: ', console.log(count));
