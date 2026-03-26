@@ -2,153 +2,116 @@ import React, { useState } from 'react';
 import '../styles/Guesses.css';
 // itemSolution should always be formatted correctly.
 interface GuessesProps {
-    itemSolution: string;
-    UpdateGameInfo: (roundsUpdate: number, hasWonUpdate: boolean) => void;
+  itemSolution: string;
+  history: Guess[];
+  hasWon: boolean;
+  isGameOver: boolean;
+  onSubmitGuess: (formattedGuess: string) => void;
 }
+
 type Guess = {
-    value: string | null;
-    direction: 'up' | 'down' | 'correct' | null;
-    flipped: boolean;
+  value: string | null;
+  direction: 'up' | 'down' | 'correct' | null;
 };
-function Guesses({ itemSolution, UpdateGameInfo }: GuessesProps) {
-    const [guess, setGuess] = useState<string>('');
-    const [history, setHistory] = useState<Guess[]>(
-        Array(6).fill({ value: null, direction: null, flipped: false }),
-    );
-    const [isError, setIsError] = useState<boolean>(false);
-    const [errorMessage, setErrorMessage] = useState<string>('');
-    const [hasWon, setHasWon] = useState<boolean>(false);
-    const [, setFlipIndex] = useState<number | null>(null);
-    const numGuesses = history.filter((g) => g.value !== null).length;
-    let hasWonUpdate = false;
-    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
-        // format guess
-        const formattedGuess = formatGuess(guess);
-        const error = isValidSubmission(formattedGuess);
-        if (error) {
-            setErrorMessage(error);
-            setIsError(true);
-            setGuess('');
-            return;
-        }
-        // valid guess
-        setIsError(false);
-        // compare solution to guess
-        const numGuess = parseFloat(formattedGuess);
-        const numSolution = parseFloat(itemSolution);
-        let guessDirection: 'up' | 'down' | 'correct';
-        if (numGuess < numSolution) guessDirection = 'up';
-        else if (numGuess > numSolution) guessDirection = 'down';
-        else guessDirection = 'correct';
 
-        // update history
-        setHistory((prevHistory) => {
-            const updated = [...prevHistory];
-            const index = updated.findIndex((g) => g.value === null);
-            if (index !== -1) {
-                updated[index] = {
-                    value: '$' + formattedGuess,
-                    direction: guessDirection,
-                    flipped: false,
-                };
+function Guesses({
+  itemSolution,
+  history,
+  hasWon,
+  isGameOver,
+  onSubmitGuess,
+}: GuessesProps) {
+  const [guess, setGuess] = useState<string>('');
+  const [isError, setIsError] = useState<boolean>(false);
+  const [errorMessage, setErrorMessage] = useState<string>('');
+  const numGuesses = history.filter((g) => g.value !== null).length;
+  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
 
-                setFlipIndex(index);
+    // Don't submit if the game is already finished.
+    if (hasWon || isGameOver) return;
 
-                setTimeout(() => {
-                    setHistory((prevHistory) => {
-                        const updated = [...prevHistory];
-                        if (updated[index]) updated[index].flipped = true;
-                        return updated;
-                    });
-                }, 600); // match CSS flip animation time to be .6 sec
-            }
-            return updated;
-        });
-        // still want to add to History even if you win
-        if (guessDirection === 'correct') {
-            hasWonUpdate = true;
-            setHasWon((w) => !w);
-            console.log(-1, hasWon); //would still be false... hasWon changes after handleSubmit
-        }
-        setGuess('');
-        console.log(0, hasWon);
-        // pass up logic
-        console.log(
-            1,
-            'Guesses level hasWonUpdate before Update: ',
-            hasWonUpdate, //local variable will instantly change
-        );
-        // const count = history.filter((g) => g.value !== null).length;
-        // console.log(2, 'Current Guess Length: ', console.log(count));
-        UpdateGameInfo(2 + numGuesses, hasWonUpdate); // pass up local var, state for return
-        console.log(6);
-    };
-    // checks for empty input or previously guessed input, else returns null
-    const isValidSubmission = (guess: string) => {
-        console.log('Checking submission');
-        console.log(guess);
-        if (guess === '') {
-            return 'Please enter a valid price.';
-        } else if (history.some((entry) => entry.value === '$' + guess)) {
-            return 'Already tried that price.';
-        }
-        return null;
-    };
-    const formatGuess = (guess: string) => {
-        // handles visual of past guesses
-        // adds trailing 0's to cents section
-        // remove any leading zeros
+    // Format guess.
+    const formattedGuess = formatGuess(guess);
+    const error = isValidSubmission(formattedGuess);
+    if (error) {
+      setErrorMessage(error);
+      setIsError(true);
+      setGuess('');
+      return;
+    }
 
-        // have to check for empty string in this step
-        if (guess === '') {
-            return '';
-        }
-        // parseInt removes trailing 0
-        const numGuess = parseFloat(guess);
+    // Valid guess: commit it to App.
+    setIsError(false);
 
-        // add a '.' if necessary
-        let strGuess = numGuess.toString();
-        if (strGuess.split('.').length === 1) {
-            strGuess = strGuess + '.';
-        }
-        // adds trailing 0's
-        const parts = strGuess.split('.');
-        while (parts[1].length < 2) {
-            parts[1] = parts[1] + '0';
-            strGuess = strGuess + '0';
-        }
+    onSubmitGuess(formattedGuess);
+    setGuess('');
+  }
+  // checks for empty input or previously guessed input, else returns null
+  function isValidSubmission(guess: string) {
+    console.log('Checking submission');
+    console.log(guess);
+    if (guess === '') {
+      return 'Please enter a valid price.';
+    } else if (history.some((entry) => entry.value === '$' + guess)) {
+      return 'Already tried that price.';
+    }
+    return null;
+  }
+  function formatGuess(guess: string) {
+    // handles visual of past guesses
+    // adds trailing 0's to cents section
+    // remove any leading zeros
 
-        return strGuess;
-    };
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        // handles input into form
-        // only allows 1 '.' and integers
-        // only allows 2 digits in cents section
-        const value = e.target.value;
-        if (!/^[0-9]*\.?[0-9]*$/.test(value)) return;
-        const dotCount = value.split('.').length - 1;
-        if (dotCount > 1) return;
-        const parts = value.split('.');
-        if (parts[1] && parts[1].length > 2) return;
+    // have to check for empty string in this step
+    if (guess === '') {
+      return '';
+    }
+    // parseInt removes trailing 0
+    const numGuess = parseFloat(guess);
 
-        setGuess(value);
-    };
-    return (
-        <>
-            {/* <h3>Your guesses:</h3> */}
-            <div className="grid-container">
-                {history.map((g, i) => (
-                    <div key={i} className="guess-value-box">
-                        <div className="flip-front">
-                            <div className="value-cell">{g.value ?? ''}</div>
-                            <div className="direction-cell">
-                                {g.direction === 'up' && '⬆️'}
-                                {g.direction === 'down' && '⬇️'}
-                                {g.direction === 'correct' && '✅'}
-                            </div>
-                        </div>
-                        {/*
+    // add a '.' if necessary
+    let strGuess = numGuess.toString();
+    if (strGuess.split('.').length === 1) {
+      strGuess = strGuess + '.';
+    }
+    // adds trailing 0's
+    const parts = strGuess.split('.');
+    while (parts[1].length < 2) {
+      parts[1] = parts[1] + '0';
+      strGuess = strGuess + '0';
+    }
+
+    return strGuess;
+  }
+  function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
+    // handles input into form
+    // only allows 1 '.' and integers
+    // only allows 2 digits in cents section
+    const value = e.target.value;
+    if (!/^[0-9]*\.?[0-9]*$/.test(value)) return;
+    const dotCount = value.split('.').length - 1;
+    if (dotCount > 1) return;
+    const parts = value.split('.');
+    if (parts[1] && parts[1].length > 2) return;
+
+    setGuess(value);
+  }
+  return (
+    <>
+      {/* <h3>Your guesses:</h3> */}
+      <div className="grid-container">
+        {history.map((g, i) => (
+          <div key={i} className="guess-value-box">
+            <div className="flip-front">
+              <div className="value-cell">{g.value ?? ''}</div>
+              <div className="direction-cell">
+                {g.direction === 'up' && '⬆️'}
+                {g.direction === 'down' && '⬇️'}
+                {g.direction === 'correct' && '✅'}
+              </div>
+            </div>
+            {/*
                             <div className="flip-back">
                                 <div className="value-cell">
                                     {g.value ?? ''}
@@ -159,34 +122,34 @@ function Guesses({ itemSolution, UpdateGameInfo }: GuessesProps) {
                                     {g.direction === 'correct' && '✅'}
                                 </div>
                             </div> */}
-                    </div>
-                ))}
-            </div>
-            <div className="input-submit-container">
-                <form onSubmit={handleSubmit}>
-                    <input
-                        className="price-input"
-                        type="text"
-                        name="guess"
-                        value={guess}
-                        onChange={handleChange}
-                        placeholder="$0.00"
-                        disabled={hasWon || 2 + numGuesses === 8}
-                        autoComplete="off"
-                    />
-                    <button
-                        type="submit"
-                        className="submit-button"
-                        disabled={hasWon || 2 + numGuesses === 8}
-                    >
-                        Submit
-                    </button>
-                </form>
-            </div>
+          </div>
+        ))}
+      </div>
+      <div className="input-submit-container">
+        <form onSubmit={handleSubmit}>
+          <input
+            className="price-input"
+            type="text"
+            name="guess"
+            value={guess}
+            onChange={handleChange}
+            placeholder="$0.00"
+            disabled={!itemSolution || hasWon || isGameOver || numGuesses >= 6}
+            autoComplete="off"
+          />
+          <button
+            type="submit"
+            className="submit-button"
+            disabled={!itemSolution || hasWon || isGameOver || numGuesses >= 6}
+          >
+            Submit
+          </button>
+        </form>
+      </div>
 
-            <p className="error-message">{isError ? errorMessage : ''}</p>
-        </>
-    );
+      <p className="error-message">{isError ? errorMessage : ''}</p>
+    </>
+  );
 }
 
 export default Guesses;

@@ -6,121 +6,145 @@ import Guesses from './components/Guesses';
 // import LoadImage from './assets/loading.jpg';
 
 interface RealItem {
-    // id: number;
-    item_name: string;
-    item_price: string;
-    item_image: string;
+  // id: number;
+  item_name: string;
+  item_price: string;
+  item_image: string;
 }
-export default function Game() {
-    const [itemName, setItemName] = useState<string>('');
-    const [itemSolution, setItemSolution] = useState<string>('');
-    const [itemImage, setItemImage] = useState<string>('');
-    const [guessesSubmitted, setGuessesSubmitted] = useState<number>(1);
-    const [hasWon, setHasWon] = useState<boolean>(false);
-    const [isGameOver, setIsGameOver] = useState<boolean>(false);
-    const [isLoading, setIsLoading] = useState<boolean>(true);
-    // Pulls item from DB
-    useEffect(() => {
-        setIsLoading(true);
-        try {
-            async function fetchData() {
-                const item = await getData();
-                setItemName(item.item_name);
-                setItemSolution(item.item_price);
-                setItemImage(item.item_image);
-            }
-            fetchData();
-        } catch {
-            console.error('Was not able to fetch data from database.');
-        } finally {
-            setIsLoading(false);
-        }
-    }, []);
 
-    const handleGameInfoUpdate = (
-        currGuessCountUpdate: number,
-        hasWonUpdate: boolean,
-    ) => {
-        console.log('=====Updating Game Info=====');
-        if (!hasWonUpdate) {
-            setGuessesSubmitted(currGuessCountUpdate);
-        }
-        // doesnt set guessesSubmitted until after handleGameInfoUpdate
-        console.log(3, 'guessesSubmitted: ', guessesSubmitted);
-        if (guessesSubmitted === 6) {
-            setIsGameOver(true);
-            console.log('Game Over!');
-        }
-        // console.log("Upper level hasWonTemp: ", hasWonUpdate);
-        console.log(4, hasWonUpdate);
-        // setHasWon((hasWon) => hasWonUpdate);
-        console.log(5, hasWon);
-        console.log('============================');
-    };
-    return (
-        <>
-            <header>
-                <Navbar />
-            </header>
-            <div className="game-area">
-                {/* <div className="item-price">
+type GuessDirection = 'up' | 'down' | 'correct' | null;
+type Guess = {
+  value: string | null;
+  direction: GuessDirection;
+};
+
+function createInitialHistory(): Guess[] {
+  return Array.from({ length: 6 }, () => ({
+    value: null,
+    direction: null,
+  }));
+}
+
+export default function Game() {
+  const [itemName, setItemName] = useState<string>('');
+  const [itemSolution, setItemSolution] = useState<string>('');
+  const [itemImage, setItemImage] = useState<string>('');
+  const [history, setHistory] = useState<Guess[]>(() => createInitialHistory());
+  const [hasWon, setHasWon] = useState<boolean>(false);
+  const [isGameOver, setIsGameOver] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const numGuesses = history.filter((g) => g.value !== null).length + 1;
+  // Pulls item from DB
+  useEffect(() => {
+    setIsLoading(true);
+    try {
+      async function fetchData() {
+        const item = await getData();
+        setItemName(item.item_name);
+        setItemSolution(item.item_price);
+        setItemImage(item.item_image);
+      }
+      fetchData();
+    } catch {
+      console.error('Was not able to fetch data from database.');
+    } finally {
+      setIsLoading(false);
+    }
+  }, []);
+
+  function handleGuessSubmit(formattedGuess: string) {
+    // Guard: don't accept guesses before the solution arrives, or after game ends.
+    if (!itemSolution || hasWon || isGameOver) return;
+
+    // Find first empty slot from current state.
+    const index = history.findIndex((g) => g.value === null);
+    if (index === -1) return;
+
+    const numGuess = parseFloat(formattedGuess);
+    const numSolution = parseFloat(itemSolution);
+
+    let guessDirection: 'up' | 'down' | 'correct';
+    if (numGuess < numSolution) guessDirection = 'up';
+    else if (numGuess > numSolution) guessDirection = 'down';
+    else guessDirection = 'correct';
+
+    // Commit guess to history (value includes the leading '$' for display).
+    setHistory((prev) => {
+      const updated = [...prev];
+      const targetIndex = updated.findIndex((g) => g.value === null);
+      if (targetIndex === -1) return prev;
+      updated[targetIndex] = {
+        value: '$' + formattedGuess,
+        direction: guessDirection,
+      };
+      return updated;
+    });
+
+    if (guessDirection === 'correct') {
+      setHasWon(true);
+    }
+    if (index === 5) {
+      setIsGameOver(true);
+    }
+  }
+  return (
+    <>
+      <header>
+        <Navbar />
+      </header>
+      <div className="game-area">
+        {/* <div className="item-price">
                     <h1>{isLoading ? "" : "Answer: " + itemSolution}</h1>
                 </div> */}
-                <div className="item-container">
-                    <div className="item-image-container">
-                        <img
-                            src={isLoading ? undefined : itemImage}
-                            height="300px"
-                            className="item-image"
-                        />
-                    </div>
-                    <div className="image-item-name-container">
-                        <p>{isLoading ? '' : itemName}</p>
-                    </div>
-                </div>
-                <div className="game-stats">
-                    <p>
-                        {guessesSubmitted >= 7
-                            ? 'Guess 6/6'
-                            : 'Guess ' + guessesSubmitted + '/6'}
-                    </p>
-                    <p>
-                        {hasWon
-                            ? 'You win! The answer is: ' + itemSolution
-                            : ''}
-                    </p>
-                    <p>
-                        {isGameOver && !hasWon
-                            ? "You'll get it next time!"
-                            : ''}
-                    </p>
-                </div>
-                <div className="guesses-container">
-                    <Guesses
-                        itemSolution={itemSolution}
-                        UpdateGameInfo={handleGameInfoUpdate}
-                    />
-                </div>
-            </div>
-            <footer>
-                <Footer />
-            </footer>
-        </>
-    );
+        <div className="item-container">
+          <div className="item-image-container">
+            <img
+              src={isLoading ? undefined : itemImage}
+              height="300px"
+              className="item-image"
+            />
+          </div>
+          <div className="image-item-name-container">
+            <p>{isLoading ? '' : itemName}</p>
+          </div>
+        </div>
+        <div className="game-stats">
+          <p>{numGuesses >= 6 ? 'Guess 6/6' : 'Guess ' + numGuesses + '/6'}</p>
+          <p>{hasWon ? 'You win! The answer is: ' + itemSolution : ''}</p>
+          <p>{isGameOver && !hasWon ? "You'll get it next time!" : ''}</p>
+        </div>
+        <div className="guesses-container">
+          <Guesses
+            itemSolution={itemSolution}
+            history={history}
+            hasWon={hasWon}
+            isGameOver={isGameOver}
+            onSubmitGuess={handleGuessSubmit}
+          />
+        </div>
+      </div>
+      <footer>
+        <Footer />
+      </footer>
+    </>
+  );
 }
 
 // returns object of day's index taken from products.json
 async function getData(): Promise<RealItem> {
-    const response = await fetch('/data/products.json');
+  const response = await fetch('/data/products.json');
+  if (!response.ok) {
+    throw new Error(`HTTP ${response.status}`);
+  }
 
-    const data = await response.json();
-    const startDate = new Date(2025, 9, 6);
-    let currDate = new Date();
-    let timeDiff = currDate.getTime() - startDate.getTime();
-    let dayDiff = timeDiff / (1000 * 3600 * 24);
-    console.log('Start Date: ' + startDate);
-    let index = Math.ceil(dayDiff) % data.length;
-    console.log(index);
-    console.log(data[index]);
-    return data[index];
+  const data = await response.json();
+  const startDate = new Date(2025, 9, 6);
+  const currDate = new Date();
+  const timeDiff = currDate.getTime() - startDate.getTime();
+  const dayDiff = timeDiff / (1000 * 3600 * 24);
+  const index = Math.ceil(dayDiff) % data.length;
+  console.log('Start Date: ' + startDate);
+  console.log(index);
+  console.log(data[index]);
+  return data[index];
 }

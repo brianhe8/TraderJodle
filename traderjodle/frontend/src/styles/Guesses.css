@@ -1,114 +1,79 @@
 .grid-container {
-    display: flex;
-    flex-direction: column; /* sets guesses to be vertical*/
-    width: 300px; /* sets max width of grid container */
-    margin: 0 auto; /* centers guesses container */
-    gap: 10px;
+  display: flex;
+  flex-direction: column; /* sets guesses to be vertical*/
+  width: 300px; /* sets max width of grid container */
+  margin: 0 auto; /* centers guesses container */
+  gap: 10px;
 }
 
 /* Each row */
 .guess-value-box {
-    display: flex; /* allows value and direction cell to be flexed */
-    flex-direction: row;
-    align-items: center; /* centers content vertically */
-    box-sizing: border-box; /* only applies if you set px to width */
-    gap: 5px;
-    /* position: absolute; */
+  display: flex; /* allows value and direction cell to be flexed */
+  flex-direction: row;
+  align-items: center; /* centers content vertically */
+  box-sizing: border-box; /* only applies if you set px to width */
+  gap: 5px;
+  /* position: absolute; */
 }
 .flip-front {
-    display: flex;
-    width: 100%;
-    flex-direction: row;
-    align-items: center; /* centers content vertically */
-    box-sizing: border-box; /* only applies if you set px to width */
-    gap: 5px;
+  display: flex;
+  width: 100%;
+  flex-direction: row;
+  align-items: center; /* centers content vertically */
+  box-sizing: border-box; /* only applies if you set px to width */
+  gap: 5px;
 }
 .value-cell {
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
-    flex: 5; /* width */
-    height: 35px;
-    overflow: hidden;
-    border-radius: 5px;
-    padding-left: 15px;
-    background-color: gainsboro;
-    font-weight: bold;
-    box-shadow:
-        inset 0px 0px 5px rgba(0, 0, 0, 30%),
-        3px 5px 3px rgba(0, 0, 0, 20%); /* outer */
-}
-.value-cell.hover {
-    animation-name: flip;
-    animation-duration: 2s;
-    animation-fill-mode: both;
-    animation-delay: 2s;
-    animation-iteration-count: infinite;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  flex: 5; /* width */
+  height: 35px;
+  overflow: hidden;
+  border-radius: 5px;
+  padding-left: 15px;
+  background-color: gainsboro;
+  font-weight: bold;
+  box-shadow:
+    inset 0px 0px 5px rgba(0, 0, 0, 30%),
+    3px 5px 3px rgba(0, 0, 0, 20%); /* outer */
 }
 .direction-cell {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex: 1; /* width */
-    height: 35px;
-    border-radius: 5px;
-    background-color: blanchedalmond;
-    box-shadow:
-        inset 0px 0pc 5px rgba(0, 0, 0, 30%),
-        3px 5px 3px rgba(0, 0, 0, 20%);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex: 1; /* width */
+  height: 35px;
+  border-radius: 5px;
+  background-color: blanchedalmond;
+  box-shadow:
+    inset 0px 0pc 5px rgba(0, 0, 0, 30%),
+    3px 5px 3px rgba(0, 0, 0, 20%);
 }
 .input-submit-container {
-    margin: 5px;
+  margin: 5px;
 }
 .price-input {
-    font-size: 18px;
-    margin: 3px;
+  font-size: 18px;
+  margin: 3px;
 }
 .submit-button {
-    font-size: 12px;
-    border-radius: 8px;
-    margin: 4px;
-    border: 1.5px solid transparent;
-    padding: 0.6em 0.6em;
-    font-weight: 650;
-    font-family: inherit;
-    background-color: #ffffff;
-    cursor: pointer;
-    transition:
-        border-color 0.25s,
-        transform 3s 3s ease;
+  font-size: 12px;
+  border-radius: 8px;
+  margin: 4px;
+  border: 1.5px solid transparent;
+  padding: 0.6em 0.6em;
+  font-weight: 650;
+  font-family: inherit;
+  background-color: #ffffff;
+  cursor: pointer;
+  transition: border-color 0.25s;
 }
 .submit-button:hover {
-    /* Second state of button*/
-    border-color: #646cff;
-    /* transform: scale(1.1) rotateX(180deg); */
-    animation-name: flip;
-    animation-duration: 2s;
-    animation-fill-mode: both;
-    animation-delay: 2s;
-    animation-iteration-count: infinite;
+  /* Second state of button*/
+  border-color: #646cff;
+  /* transform: scale(1.1) rotateX(180deg); */
 }
-/* button:focus,
-button:focus-visible {
-    outline: 4px auto -webkit-focus-ring-color;
-} */
 .error-message {
-    color: red;
-}
-
-@keyframes flip {
-    from {
-        transform: rotateX(45deg) scale(1.1);
-    }
-    to {
-        transform: rotateX(180deg) scale(1.5);
-    }
-}
-@keyframes guess {
-    from {
-        left: 0px;
-    }
-    to {
-        left: 100%;
-    }
+  color: red;
 }
