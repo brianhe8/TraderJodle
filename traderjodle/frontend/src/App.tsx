@@ -110,8 +110,11 @@ export default function Game() {
         </div>
         <div className="game-stats">
           <p>{numGuesses >= 6 ? 'Guess 6/6' : 'Guess ' + numGuesses + '/6'}</p>
-          <p>{hasWon ? 'You win! The answer is: ' + itemSolution : ''}</p>
-          <p>{isGameOver && !hasWon ? "You'll get it next time!" : ''}</p>
+          <div className="game-stats-result-message">
+            <p>{hasWon ? 'You win!' : ''}</p>
+            <p> {'Answer: $' + itemSolution}</p>
+            <p>{isGameOver && !hasWon ? "You'll get it next time!" : ''}</p>
+          </div>
         </div>
         <div className="guesses-container">
           <Guesses

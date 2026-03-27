@@ -1,23 +1,27 @@
 * {
-    margin: 0;
-    padding: 0;
+  margin: 0;
+  padding: 0;
+}
+@font-face {
+  font-family: 'TJFont';
+  src: url('../assets/fonts/TraderJoes-JYrx.otf') format('opentype');
 }
 body {
-    font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
-    font-synthesis: none;
-    text-rendering: optimizeLegibility;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    font-weight: 600;
-    text-align: center;
-    color: #141035de;
-    background-image: url('../assets/TJBackground.webp');
-    background-size: cover;
-    background-attachment: fixed;
-    display: flex;
-    flex-direction: column;
-    /* min-height: 100vh; */
-    overflow-y: hidden;
+  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-weight: 600;
+  text-align: center;
+  color: #141035de;
+  background-image: url('../assets/TJBackground.webp');
+  background-size: cover;
+  background-attachment: fixed;
+  display: flex;
+  flex-direction: column;
+  /* min-height: 100vh; */
+  overflow-y: hidden;
 }
 /* #root {
     font-weight: 600;
@@ -30,85 +34,91 @@ body {
     flex-direction: column; */
 /* } */
 .game-area {
-    align-items: center;
-    justify-content: center;
-    flex: 1; /* fills up the remaining screen after header and footer placed */
-    padding-top: 50px; /*height of navbar */
-    padding-bottom: 80px;
-    /* min-height: 100vh; */
-    box-sizing: border-box;
+  align-items: center;
+  justify-content: center;
+  flex: 1; /* fills up the remaining screen after header and footer placed */
+  padding-top: 50px; /*height of navbar */
+  padding-bottom: 80px;
+  /* min-height: 100vh; */
+  box-sizing: border-box;
 }
 .item-container {
-    border: dotted orange;
-    border-width: 9px;
-    border-radius: 10px;
+  border: dotted orange;
+  border-width: 9px;
+  border-radius: 10px;
 
-    width: fit-content;
-    height: fit-content;
-    margin: 0 auto;
-    margin-top: 5px;
-    padding: 5px 20px 10px 20px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
+  width: fit-content;
+  height: fit-content;
+  margin: 0 auto;
+  margin-top: 5px;
+  padding: 5px 20px 10px 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 .item-image-container {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    padding-bottom: 10px;
-    /* border: 1px solid; */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding-bottom: 10px;
+  /* border: 1px solid; */
 }
 .item-image {
-    background-color: #ffffff;
-    margin: 5px;
-    margin-top: 10px;
-    padding: 20px;
-    height: 30vh;
-    width: auto; /* automatically adjusts to maintain ratio w height */
-    border-radius: 10px;
-    box-shadow: 0px 5px 10px 2px rgb(0, 0, 0, 50%);
+  background-color: #ffffff;
+  margin: 5px;
+  margin-top: 10px;
+  padding: 20px;
+  height: 30vh;
+  width: auto; /* automatically adjusts to maintain ratio w height */
+  border-radius: 10px;
+  box-shadow: 0px 5px 10px 2px rgb(0, 0, 0, 50%);
 }
 .image-item-name-container {
-    font-size: 20px;
+  font-size: 20px;
 }
 .game-stats {
-    margin: 7px;
+  margin: 7px;
+  font-size: 18px;
+  font-family: 'TJFont', sans-serif;
+  letter-spacing: 1.2px;
 }
-
+.game-stats-result-message {
+  color: #213547;
+  padding: 12px 8px 8px 8px;
+}
 /* logo stuff */
 .logo:hover {
-    filter: drop-shadow(0 0 2em #646cffaa);
+  filter: drop-shadow(0 0 2em #646cffaa);
 }
 .logo.react:hover {
-    filter: drop-shadow(0 0 2em #61dafbaa);
+  filter: drop-shadow(0 0 2em #61dafbaa);
 }
 
 @keyframes logo-spin {
-    from {
-        transform: rotate(0deg);
-    }
-    to {
-        transform: rotate(360deg);
-    }
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 @media (prefers-reduced-motion: no-preference) {
-    a:nth-of-type(2) .logo {
-        animation: logo-spin infinite 20s linear;
-    }
+  a:nth-of-type(2) .logo {
+    animation: logo-spin infinite 20s linear;
+  }
 }
 @media (prefers-color-scheme: light) {
-    :root {
-        color: #213547;
-        background-color: #ffffff;
-    }
-    a:hover {
-        color: #747bff;
-    }
-    button {
-        background-color: #f9f9f9;
-    }
+  :root {
+    color: #213547;
+    background-color: #ffffff;
+  }
+  a:hover {
+    color: #747bff;
+  }
+  button {
+    background-color: #f9f9f9;
+  }
 }

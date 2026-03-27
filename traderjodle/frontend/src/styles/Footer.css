@@ -1,9 +1,15 @@
+@font-face {
+  font-family: 'TJFont';
+  src: url('../assets/fonts/TraderJoes-JYrx.otf') format('opentype');
+}
 .Footer {
-    position: fixed;
-    background-color: #dfa06f;
-    flex-shrink: 0;
-    bottom: 0;
-    height: 30px;
-    z-index: 1;
-    width: 100%;
+  font-family: 'TJFont', sans-serif;
+  position: fixed;
+  background-color: #dfa06f;
+  flex-shrink: 0;
+  bottom: 0;
+  height: 30px;
+  z-index: 1;
+  width: 100%;
+  padding: 15px 5px 0px 5px;
 }
