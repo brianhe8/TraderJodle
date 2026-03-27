@@ -16,12 +16,14 @@ type GuessDirection = 'up' | 'down' | 'correct' | null;
 type Guess = {
   value: string | null;
   direction: GuessDirection;
+  flipped: boolean;
 };
 
 function createInitialHistory(): Guess[] {
   return Array.from({ length: 6 }, () => ({
     value: null,
     direction: null,
+    flipped: false,
   }));
 }
 
@@ -76,12 +78,26 @@ export default function Game() {
       updated[targetIndex] = {
         value: '$' + formattedGuess,
         direction: guessDirection,
+        flipped: false,
       };
       return updated;
     });
 
+    const flipIndex = index;
+    window.setTimeout(() => {
+      setHistory((prev) => {
+        const next = [...prev];
+        const row = next[flipIndex];
+        if (row?.value !== null) {
+          next[flipIndex] = { ...row, flipped: true };
+        }
+        return next;
+      });
+    }, 100);
+
     if (guessDirection === 'correct') {
       setHasWon(true);
+      setIsGameOver(true);
     }
     if (index === 5) {
       setIsGameOver(true);
@@ -112,7 +128,7 @@ export default function Game() {
           <p>{numGuesses >= 6 ? 'Guess 6/6' : 'Guess ' + numGuesses + '/6'}</p>
           <div className="game-stats-result-message">
             <p>{hasWon ? 'You win!' : ''}</p>
-            <p> {'Answer: $' + itemSolution}</p>
+            <p> {isGameOver ? 'Answer: $' + itemSolution : ''}</p>
             <p>{isGameOver && !hasWon ? "You'll get it next time!" : ''}</p>
           </div>
         </div>

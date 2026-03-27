@@ -10,7 +10,15 @@ interface GuessesProps {
 type Guess = {
   value: string | null;
   direction: 'up' | 'down' | 'correct' | null;
+  flipped: boolean;
 };
+
+function DirectionGlyph({ direction }: { direction: Guess['direction'] }) {
+  if (direction === 'up') return '⬆️';
+  if (direction === 'down') return '⬇️';
+  if (direction === 'correct') return '✅';
+  return null;
+}
 
 function Guesses({ history, hasWon, isGameOver, onSubmitGuess }: GuessesProps) {
   const [guess, setGuess] = useState<string>('');
@@ -94,25 +102,31 @@ function Guesses({ history, hasWon, isGameOver, onSubmitGuess }: GuessesProps) {
       <div className="grid-container">
         {history.map((g, i) => (
           <div key={i} className="guess-value-box">
-            <div className="flip-front">
-              <div className="value-cell">{g.value ?? ''}</div>
-              <div className="direction-cell">
-                {g.direction === 'up' && '⬆️'}
-                {g.direction === 'down' && '⬇️'}
-                {g.direction === 'correct' && '✅'}
+            {g.value === null ? (
+              <div className="guess-row-static">
+                <div className="value-cell" />
+                <div className="direction-cell" />
               </div>
-            </div>
-            {/*
-                            <div className="flip-back">
-                                <div className="value-cell">
-                                    {g.value ?? ''}
-                                </div>
-                                <div className="direction-cell">
-                                    {g.direction === 'up' && '⬆️'}
-                                    {g.direction === 'down' && '⬇️'}
-                                    {g.direction === 'correct' && '✅'}
-                                </div>
-                            </div> */}
+            ) : (
+              <div className="flip-card">
+                <div
+                  className={
+                    g.flipped ? 'flip-card-inner is-flipped' : 'flip-card-inner'
+                  }
+                >
+                  <div className="flip-face flip-face--front">
+                    <div className="value-cell flip-placeholder"></div>
+                    <div className="direction-cell" />
+                  </div>
+                  <div className="flip-face flip-face--back">
+                    <div className="value-cell">{g.value}</div>
+                    <div className="direction-cell">
+                      <DirectionGlyph direction={g.direction} />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
         ))}
       </div>

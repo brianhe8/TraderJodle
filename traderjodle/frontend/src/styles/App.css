@@ -79,7 +79,7 @@ body {
   font-size: 20px;
 }
 .game-stats {
-  margin: 7px;
+  margin: 16px 8px 8px 8px;
   font-size: 18px;
   font-family: 'TJFont', sans-serif;
   letter-spacing: 1.2px;
@@ -87,6 +87,7 @@ body {
 .game-stats-result-message {
   color: #213547;
   padding: 12px 8px 8px 8px;
+  line-height: 1.2;
 }
 /* logo stuff */
 .logo:hover {
