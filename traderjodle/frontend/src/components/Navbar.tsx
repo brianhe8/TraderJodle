@@ -6,9 +6,9 @@ export default function Navbar() {
       <img className="toplogo" src={TJlogo}></img>
       <p className="title">Trader Jodle!</p>
       <ul className="button-list">
-        <li>
+        {/* <li>
           <a href="https://costcodle.com/">costcodle</a>
-        </li>
+        </li> */}
       </ul>
     </nav>
   );
