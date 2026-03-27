@@ -36,20 +36,20 @@ export default function Game() {
   const numGuesses = history.filter((g) => g.value !== null).length + 1;
   // Pulls item from DB
   useEffect(() => {
-    setIsLoading(true);
-    try {
-      async function fetchData() {
+    async function fetchData() {
+      setIsLoading(true);
+      try {
         const item = await getData();
         setItemName(item.item_name);
         setItemSolution(item.item_price);
         setItemImage(item.item_image);
+      } catch {
+        console.error('Was not able to fetch data from database.');
+      } finally {
+        setIsLoading(false);
       }
-      fetchData();
-    } catch {
-      console.error('Was not able to fetch data from database.');
-    } finally {
-      setIsLoading(false);
     }
+    fetchData();
   }, []);
 
   function handleGuessSubmit(formattedGuess: string) {
@@ -115,7 +115,6 @@ export default function Game() {
         </div>
         <div className="guesses-container">
           <Guesses
-            itemSolution={itemSolution}
             history={history}
             hasWon={hasWon}
             isGameOver={isGameOver}

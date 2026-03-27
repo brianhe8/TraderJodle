@@ -1,8 +1,6 @@
 import React, { useState } from 'react';
 import '../styles/Guesses.css';
-// itemSolution should always be formatted correctly.
 interface GuessesProps {
-  itemSolution: string;
   history: Guess[];
   hasWon: boolean;
   isGameOver: boolean;
@@ -14,22 +12,13 @@ type Guess = {
   direction: 'up' | 'down' | 'correct' | null;
 };
 
-function Guesses({
-  itemSolution,
-  history,
-  hasWon,
-  isGameOver,
-  onSubmitGuess,
-}: GuessesProps) {
+function Guesses({ history, hasWon, isGameOver, onSubmitGuess }: GuessesProps) {
   const [guess, setGuess] = useState<string>('');
   const [isError, setIsError] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string>('');
   const numGuesses = history.filter((g) => g.value !== null).length;
-  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+  function handleSubmit(e: React.SubmitEvent<HTMLFormElement>) {
     e.preventDefault();
-
-    // Don't submit if the game is already finished.
-    if (hasWon || isGameOver) return;
 
     // Format guess.
     const formattedGuess = formatGuess(guess);
@@ -55,6 +44,8 @@ function Guesses({
       return 'Please enter a valid price.';
     } else if (history.some((entry) => entry.value === '$' + guess)) {
       return 'Already tried that price.';
+    } else if (guess === 'NaN.00') {
+      return 'Please enter a valid price.';
     }
     return null;
   }
@@ -127,20 +118,23 @@ function Guesses({
       </div>
       <div className="input-submit-container">
         <form onSubmit={handleSubmit}>
-          <input
-            className="price-input"
-            type="text"
-            name="guess"
-            value={guess}
-            onChange={handleChange}
-            placeholder="$0.00"
-            disabled={!itemSolution || hasWon || isGameOver || numGuesses >= 6}
-            autoComplete="off"
-          />
+          <div className="price-input-wrapper">
+            <span className="price-input-prefix">$</span>
+            <input
+              className="price-input"
+              type="text"
+              name="guess"
+              value={guess}
+              onChange={handleChange}
+              placeholder="0.00"
+              disabled={hasWon || isGameOver || numGuesses === 6}
+              autoComplete="off"
+            />
+          </div>
           <button
             type="submit"
             className="submit-button"
-            disabled={!itemSolution || hasWon || isGameOver || numGuesses >= 6}
+            disabled={hasWon || isGameOver || numGuesses === 6}
           >
             Submit
           </button>
