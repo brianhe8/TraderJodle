@@ -7,8 +7,8 @@
   top: 0;
   font-family: 'TJFont', sans-serif;
   /* background-color: #dfa06f; */
-  display: flex;
-  justify-content: space-between;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
   align-items: center;
   color: rgb(235, 39, 0);
   flex-shrink: 0;
@@ -16,26 +16,36 @@
   z-index: 1;
   width: 100%;
   border-bottom: 2px solid #dfa06f;
+  box-sizing: border-box;
 }
 .title {
   font-size: 32px;
+  margin: 0;
+  line-height: 1;
+  justify-self: center;
+  align-self: center;
 }
 .button-list {
   display: flex;
   list-style: none;
   gap: 1rem;
-  margin: 0;
-  padding: 0;
+  padding: 0 16px 0 0;
   font-weight: 100;
   color: #646cff;
   text-decoration: inherit;
+  justify-self: end;
+  align-self: center;
 }
 .button-list:hover {
   color: #4086ff;
 }
 .toplogo {
-  height: 40px;
-  padding: 1.5rem;
+  height: 34px;
+  width: auto;
+  padding: 0 16px;
+  justify-self: start;
+  align-self: center;
+  box-sizing: content-box;
   will-change: filter;
   transition: filter 300ms;
 }
