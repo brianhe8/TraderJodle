@@ -94,7 +94,7 @@
   border-radius: 5px;
   background-color: blanchedalmond;
   box-shadow:
-    inset 0px 0pc 5px rgba(0, 0, 0, 30%),
+    inset 0px 0px 5px rgba(0, 0, 0, 30%),
     3px 5px 3px rgba(0, 0, 0, 20%);
 }
 .input-submit-container {

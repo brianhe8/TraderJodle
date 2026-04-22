@@ -12,8 +12,7 @@ import {
   type GuessDistributionStats,
   type WinBucketKey,
 } from './stats/guessDistribution';
-// import LoadImage from './assets/loading.jpg';
-
+import confetti from 'canvas-confetti';
 interface RealItem {
   // id: number;
   item_name: string;
@@ -187,6 +186,12 @@ export default function Game() {
       setHasWon(true);
       setIsGameOver(true);
       setGuessStats(recordWin(index + 1));
+      confetti({
+        particleCount: 100,
+        spread: 70,
+        startVelocity: 30,
+        origin: { y: 0.6 },
+      });
     } else if (index === 5) {
       setIsGameOver(true);
       setGuessStats(recordLoss());
