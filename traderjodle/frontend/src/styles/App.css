@@ -37,7 +37,7 @@ body {
   align-items: center;
   justify-content: center;
   flex: 1; /* fills up the remaining screen after header and footer placed */
-  padding-top: 50px; /*height of navbar */
+  padding-top: var(--navbar-total-offset); /* matches Navbar.css :root */
   padding-bottom: 80px;
   /* min-height: 100vh; */
   box-sizing: border-box;

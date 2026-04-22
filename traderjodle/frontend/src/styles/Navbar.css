@@ -2,6 +2,17 @@
   font-family: 'TJFont';
   src: url('../assets/fonts/TraderJoes-JYrx.otf') format('opentype');
 }
+
+/* Logo corner: equal inset from viewport top & left; shared with main offset in App.css */
+:root {
+  --logo-corner-inset: 12px;
+  --navbar-logo-height: 54px;
+  --navbar-padding-bottom: 8px;
+  --navbar-total-offset: calc(
+    var(--logo-corner-inset) + var(--navbar-logo-height) + var(--navbar-padding-bottom)
+  );
+}
+
 .navbar {
   position: fixed;
   top: 0;
@@ -12,10 +23,13 @@
   align-items: end;
   color: rgb(235, 39, 0);
   flex-shrink: 0;
-  height: 50px;
+  padding-left: var(--logo-corner-inset);
+  padding-right: var(--logo-corner-inset);
+  padding-bottom: var(--navbar-padding-bottom);
+  box-sizing: border-box;
+  min-height: var(--navbar-total-offset);
   z-index: 1;
   width: 100%;
-  box-sizing: border-box;
 }
 .title {
   font-size: 32px;
@@ -60,10 +74,12 @@
   scale: 0.95;
 }
 .toplogo {
-  height: 34px;
+  height: var(--navbar-logo-height);
   width: auto;
-  padding: 0 16px;
+  margin-top: var(--logo-corner-inset);
+  padding: 0;
   justify-self: start;
+  align-self: start;
   box-sizing: content-box;
   will-change: filter;
   transition: filter 300ms;

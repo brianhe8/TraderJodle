@@ -1,5 +1,5 @@
 import '../styles/Navbar.css';
-import TJlogo from '../assets/tjlogo.png';
+import TjBackgroundWhiteRing from '../assets/TjBackgroundWhiteRing.png';
 import StatsIcon from './StatsIcon';
 
 type NavbarProps = {
@@ -10,7 +10,7 @@ type NavbarProps = {
 export default function Navbar({ onStatsClick, statsExpanded }: NavbarProps) {
   return (
     <nav className="navbar">
-      <img className="toplogo" src={TJlogo} alt="" />
+      <img className="toplogo" src={TjBackgroundWhiteRing} alt="" />
       {/* <div className="navbar-title-group"> */}
         <p className="title">Trader Jodle!</p>
         <button
