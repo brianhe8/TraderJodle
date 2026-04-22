@@ -246,7 +246,7 @@ export default function Game() {
             >
               <div className="guess-distribution-sheet-header">
                 <h2 id="guess-distribution-heading" className="guess-distribution-sheet-title">
-                  Guess distribution
+                  Your stats
                 </h2>
                 <button
                   type="button"
@@ -259,6 +259,7 @@ export default function Game() {
               </div>
               <div className="guess-distribution guess-distribution--overlay" aria-label="Guess distribution">
                 <StatsSummaryRow stats={guessStats} />
+                <h3 className="guess-distribution-section-title">Guess distribution</h3>
                 <GuessDistributionChart
                   guessStats={guessStats}
                   distributionMax={distributionMax}
