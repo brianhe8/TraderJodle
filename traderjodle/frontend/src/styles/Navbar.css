@@ -9,42 +9,61 @@
   /* background-color: #dfa06f; */
   display: grid;
   grid-template-columns: 1fr auto 1fr;
-  align-items: center;
+  align-items: end;
   color: rgb(235, 39, 0);
   flex-shrink: 0;
   height: 50px;
   z-index: 1;
   width: 100%;
-  border-bottom: 2px solid #dfa06f;
   box-sizing: border-box;
 }
 .title {
   font-size: 32px;
-  margin: 0;
+  margin-left: 24px;
+  margin-right: 24px;
   line-height: 1;
   justify-self: center;
-  align-self: center;
+  text-align: center;
 }
-.button-list {
-  display: flex;
-  list-style: none;
-  gap: 1rem;
-  padding: 0 16px 0 0;
-  font-weight: 100;
-  color: #646cff;
-  text-decoration: inherit;
-  justify-self: end;
-  align-self: center;
+
+.navbar-stats-btn {
+  flex-shrink: 0;
+  box-sizing: border-box;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  border-radius: 0;
+  background: transparent;
+  color: rgb(235, 39, 0);
+  cursor: pointer;
+  box-shadow: none;
 }
-.button-list:hover {
-  color: #4086ff;
+
+.navbar-stats-icon {
+  display: block;
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  object-fit: contain;
+  pointer-events: none;
+  user-select: none;
+}
+
+.navbar-stats-btn:hover {
+  scale: 1.05;
+}
+.navbar-stats-btn:active {
+  scale: 0.95;
 }
 .toplogo {
   height: 34px;
   width: auto;
   padding: 0 16px;
   justify-self: start;
-  align-self: center;
   box-sizing: content-box;
   will-change: filter;
   transition: filter 300ms;

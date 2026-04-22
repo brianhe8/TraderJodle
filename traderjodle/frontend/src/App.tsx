@@ -3,6 +3,15 @@ import './styles/App.css';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import Guesses from './components/Guesses';
+import {
+  gamesPlayed,
+  loadDistribution,
+  recordLoss,
+  recordWin,
+  winPercent,
+  type GuessDistributionStats,
+  type WinBucketKey,
+} from './stats/guessDistribution';
 // import LoadImage from './assets/loading.jpg';
 
 interface RealItem {
@@ -27,6 +36,77 @@ function createInitialHistory(): Guess[] {
   }));
 }
 
+function StatsSummaryRow({ stats }: { stats: GuessDistributionStats }) {
+  const played = gamesPlayed(stats);
+  const pct = winPercent(stats);
+  return (
+    <div className="stats-summary-row" aria-label="Game statistics">
+      <div className="stats-summary-cell">
+        <span className="stats-summary-value">{played}</span>
+        <div className="stats-summary-label-wrap">
+          <span className="stats-summary-label">Played</span>
+        </div>
+      </div>
+      <div className="stats-summary-cell">
+        <span className="stats-summary-value">{pct}</span>
+        <div className="stats-summary-label-wrap">
+          <span className="stats-summary-label">Win %</span>
+        </div>
+      </div>
+      <div className="stats-summary-cell">
+        <span className="stats-summary-value">{stats.currentStreak}</span>
+        <div className="stats-summary-label-wrap">
+          <span className="stats-summary-label">Current streak</span>
+        </div>
+      </div>
+      <div className="stats-summary-cell">
+        <span className="stats-summary-value">{stats.maxStreak}</span>
+        <div className="stats-summary-label-wrap">
+          <span className="stats-summary-label">Max streak</span>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function GuessDistributionChart({
+  guessStats,
+  distributionMax,
+}: {
+  guessStats: GuessDistributionStats;
+  distributionMax: number;
+}) {
+  return (
+    <div className="guess-distribution-rows">
+      {(['1', '2', '3', '4', '5', '6'] as WinBucketKey[]).map((label) => {
+        const count = guessStats.wins[label];
+        const pct = Math.round((count / distributionMax) * 100);
+        return (
+          <div key={label} className="guess-distribution-row">
+            <span className="guess-distribution-label">{label}</span>
+            <div className="guess-distribution-bar-wrap">
+              <div className="guess-distribution-bar" style={{ width: `${pct}%` }} />
+            </div>
+            <span className="guess-distribution-count">{count}</span>
+          </div>
+        );
+      })}
+      <div className="guess-distribution-row">
+        <span className="guess-distribution-label">X</span>
+        <div className="guess-distribution-bar-wrap">
+          <div
+            className="guess-distribution-bar guess-distribution-bar--fail"
+            style={{
+              width: `${Math.round((guessStats.failures / distributionMax) * 100)}%`,
+            }}
+          />
+        </div>
+        <span className="guess-distribution-count">{guessStats.failures}</span>
+      </div>
+    </div>
+  );
+}
+
 export default function Game() {
   const [itemName, setItemName] = useState<string>('');
   const [itemSolution, setItemSolution] = useState<string>('');
@@ -35,7 +115,21 @@ export default function Game() {
   const [hasWon, setHasWon] = useState<boolean>(false);
   const [isGameOver, setIsGameOver] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [guessStats, setGuessStats] = useState<GuessDistributionStats>(() =>
+    loadDistribution(),
+  );
+  const [distributionOpen, setDistributionOpen] = useState(false);
   const numGuesses = history.filter((g) => g.value !== null).length + 1;
+
+  useEffect(() => {
+    if (!distributionOpen) return;
+    function onKeyDown(e: KeyboardEvent) {
+      if (e.key === 'Escape') setDistributionOpen(false);
+    }
+    window.addEventListener('keydown', onKeyDown);
+    return () => window.removeEventListener('keydown', onKeyDown);
+  }, [distributionOpen]);
+
   // Pulls item from DB
   useEffect(() => {
     async function fetchData() {
@@ -98,32 +192,81 @@ export default function Game() {
     if (guessDirection === 'correct') {
       setHasWon(true);
       setIsGameOver(true);
-    }
-    if (index === 5) {
+      setGuessStats(recordWin(index + 1));
+    } else if (index === 5) {
       setIsGameOver(true);
+      setGuessStats(recordLoss());
     }
   }
+
+  const distributionMax = Math.max(
+    ...Object.values(guessStats.wins),
+    guessStats.failures,
+    1,
+  );
   return (
     <>
       <header>
-        <Navbar />
+        <Navbar
+          onStatsClick={() => setDistributionOpen(true)}
+          statsExpanded={distributionOpen}
+        />
       </header>
       <div className="game-area">
         {/* <div className="item-price">
                     <h1>{isLoading ? "" : "Answer: " + itemSolution}</h1>
                 </div> */}
-        <div className="item-container">
-          <div className="item-image-container">
-            <img
-              src={isLoading ? undefined : itemImage}
-              height="300px"
-              className="item-image"
-            />
-          </div>
-          <div className="image-item-name-container">
-            <p>{isLoading ? '' : itemName}</p>
+        <div className="item-and-distribution-row">
+          <div className="item-container">
+            <div className="item-image-container">
+              <img
+                src={isLoading ? undefined : itemImage}
+                height="300px"
+                className="item-image"
+              />
+            </div>
+            <div className="image-item-name-container">
+              <p>{isLoading ? '' : itemName}</p>
+            </div>
           </div>
         </div>
+        {distributionOpen ? (
+          <div
+            className="guess-distribution-overlay"
+            role="presentation"
+            onClick={() => setDistributionOpen(false)}
+          >
+            <div
+              id="guess-distribution-dialog"
+              className="guess-distribution-sheet"
+              role="dialog"
+              aria-modal="true"
+              aria-labelledby="guess-distribution-heading"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="guess-distribution-sheet-header">
+                <h2 id="guess-distribution-heading" className="guess-distribution-sheet-title">
+                  Guess distribution
+                </h2>
+                <button
+                  type="button"
+                  className="guess-distribution-close-btn"
+                  onClick={() => setDistributionOpen(false)}
+                  aria-label="Close statistics"
+                >
+                  ×
+                </button>
+              </div>
+              <div className="guess-distribution guess-distribution--overlay" aria-label="Guess distribution">
+                <StatsSummaryRow stats={guessStats} />
+                <GuessDistributionChart
+                  guessStats={guessStats}
+                  distributionMax={distributionMax}
+                />
+              </div>
+            </div>
+          </div>
+        ) : null}
         <div className="game-stats">
           <p>{numGuesses >= 6 ? 'Guess 6/6' : 'Guess ' + numGuesses + '/6'}</p>
           <div className="game-stats-result-message">
