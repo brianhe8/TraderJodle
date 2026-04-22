@@ -32,12 +32,13 @@
   width: 100%;
 }
 .title {
-  font-size: 32px;
+  font-size: 40px;
   margin-left: 24px;
   margin-right: 24px;
   line-height: 1;
   justify-self: center;
   text-align: center;
+  translate: 0 4px;
 }
 
 .navbar-stats-btn {
