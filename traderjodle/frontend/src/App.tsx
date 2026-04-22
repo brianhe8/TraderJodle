@@ -91,18 +91,6 @@ function GuessDistributionChart({
           </div>
         );
       })}
-      <div className="guess-distribution-row">
-        <span className="guess-distribution-label">X</span>
-        <div className="guess-distribution-bar-wrap">
-          <div
-            className="guess-distribution-bar guess-distribution-bar--fail"
-            style={{
-              width: `${Math.round((guessStats.failures / distributionMax) * 100)}%`,
-            }}
-          />
-        </div>
-        <span className="guess-distribution-count">{guessStats.failures}</span>
-      </div>
     </div>
   );
 }
@@ -199,11 +187,7 @@ export default function Game() {
     }
   }
 
-  const distributionMax = Math.max(
-    ...Object.values(guessStats.wins),
-    guessStats.failures,
-    1,
-  );
+  const distributionMax = Math.max(...Object.values(guessStats.wins), 1);
   return (
     <>
       <header>

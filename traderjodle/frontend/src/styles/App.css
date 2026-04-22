@@ -316,10 +316,6 @@ body {
   transition: width 0.25s ease;
 }
 
-.guess-distribution-bar--fail {
-  background: linear-gradient(90deg, #94a3b8, #64748b);
-}
-
 .guess-distribution-count {
   font-variant-numeric: tabular-nums;
   text-align: right;
