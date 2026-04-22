@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useLayoutEffect, useRef } from 'react';
 import './styles/App.css';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
@@ -106,7 +106,17 @@ export default function Game() {
     loadDistribution(),
   );
   const [distributionOpen, setDistributionOpen] = useState(false);
+  const [itemImageLoaded, setItemImageLoaded] = useState(false);
+  const itemImageRef = useRef<HTMLImageElement | null>(null);
   const numGuesses = history.filter((g) => g.value !== null).length + 1;
+
+  useLayoutEffect(() => {
+    if (!itemImage) return;
+    const el = itemImageRef.current;
+    if (el?.complete && el.naturalWidth > 0) {
+      setItemImageLoaded(true);
+    }
+  }, [itemImage]);
 
   useEffect(() => {
     if (!distributionOpen) return;
@@ -132,6 +142,7 @@ export default function Game() {
         setItemName(item.item_name);
         setItemSolution(item.item_price);
         setItemImage(item.item_image);
+        setItemImageLoaded(false);
       } catch {
         console.error('Was not able to fetch data from database.');
       } finally {
@@ -214,11 +225,29 @@ export default function Game() {
         <div className="item-and-distribution-row">
           <div className="item-container">
             <div className="item-image-container">
-              <img
-                src={isLoading ? undefined : itemImage}
-                height="300px"
-                className="item-image"
-              />
+              <div className="item-image-frame">
+                {!itemImage ? (
+                  <div className="item-image item-image-skeleton" aria-hidden />
+                ) : (
+                  <>
+                    {!itemImageLoaded ? (
+                      <div
+                        className="item-image item-image-skeleton item-image-skeleton--overlay"
+                        aria-hidden
+                      />
+                    ) : null}
+                    <img
+                      ref={itemImageRef}
+                      src={itemImage}
+                      height="300px"
+                      className={`item-image item-image--product ${itemImageLoaded ? 'item-image--product-loaded' : ''}`}
+                      onLoad={() => setItemImageLoaded(true)}
+                      onError={() => setItemImageLoaded(true)}
+                      alt={itemName ? `Product: ${itemName}` : 'Product image'}
+                    />
+                  </>
+                )}
+              </div>
             </div>
             <div className="image-item-name-container">
               <p>{isLoading ? '' : itemName}</p>
