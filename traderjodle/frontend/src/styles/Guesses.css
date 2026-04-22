@@ -163,8 +163,10 @@
 }
 .submit-button:hover {
   /* Second state of button*/
-  filter: brightness(1.03);
-  transform: scale(1.01) translateY(-1px);
+  scale: 1.05;
+}
+.submit-button:active {
+  scale: 0.98;
 }
 .submit-button:disabled {
   opacity: 0.6;
