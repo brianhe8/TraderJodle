@@ -118,6 +118,12 @@ export default function Game() {
     return () => window.removeEventListener('keydown', onKeyDown);
   }, [distributionOpen]);
 
+  useEffect(() => {
+    if (!isGameOver) return;
+    const id = window.setTimeout(() => setDistributionOpen(true), 1750);
+    return () => window.clearTimeout(id);
+  }, [isGameOver]);
+
   // Pulls item from DB
   useEffect(() => {
     async function fetchData() {
