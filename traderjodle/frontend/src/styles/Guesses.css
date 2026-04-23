@@ -121,7 +121,7 @@
   font-family: 'TJFont', sans-serif;
   letter-spacing: 1.2px;
   font-weight: 700;
-  color: #000000a7;
+  color: #000000ac;
   margin: 3px;
   width: 180px;
   box-sizing: border-box;
@@ -133,11 +133,13 @@
   box-shadow:
     0 10px 20px rgba(0, 0, 0, 0.08),
     inset 0 1px 0 rgba(255, 255, 255, 0.7);
-  outline: none;
-  transition:
-    border-color 160ms ease,
-    box-shadow 160ms ease,
-    transform 120ms ease;
+  outline: 2px solid transparent;
+  outline-offset: 1px;
+  transition: border-color 180ms ease;
+}
+.price-input:focus {
+  border-color: rgba(11, 11, 26, 0.55);
+
 }
 .price-input:disabled {
   opacity: 0.6;
