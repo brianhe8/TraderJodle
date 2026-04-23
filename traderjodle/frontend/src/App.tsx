@@ -239,7 +239,6 @@ export default function Game() {
                     <img
                       ref={itemImageRef}
                       src={itemImage}
-                      height="300px"
                       className={`item-image item-image--product ${itemImageLoaded ? 'item-image--product-loaded' : ''}`}
                       onLoad={() => setItemImageLoaded(true)}
                       onError={() => setItemImageLoaded(true)}

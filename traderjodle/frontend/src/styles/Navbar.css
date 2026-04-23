@@ -41,6 +41,16 @@
   translate: 0 4px;
 }
 
+@media screen and (max-height: 850px) {
+  .title {
+    font-size: 36px;
+  }
+}
+@media screen and (max-height: 800px) {
+  .title {
+    font-size: 32px;
+  }
+}
 .navbar-stats-btn {
   flex-shrink: 0;
   box-sizing: border-box;
