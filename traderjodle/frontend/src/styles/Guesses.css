@@ -181,7 +181,7 @@
 }
 
 /* Short viewports: tighten guess rows so the grid + input fit without scrolling. */
-@media (max-height: 750px) {
+@media (max-height: 770px) {
   .grid-container {
     gap: 8px;
   }

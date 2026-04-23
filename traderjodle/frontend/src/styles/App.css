@@ -174,7 +174,7 @@ body {
     font-size: 18px;
   }
 }
-@media (max-height: 850px) {
+@media (max-height: 860px) {
   .item-image,
   .item-image.item-image-skeleton:not(.item-image-skeleton--overlay) {
     max-height: 22vh;
@@ -185,7 +185,7 @@ body {
   }
 }
 
-@media (max-height: 800px) {
+@media (max-height: 820px) {
   .item-image,
   .item-image.item-image-skeleton:not(.item-image-skeleton--overlay) {
     max-height: 18vh;
