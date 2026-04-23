@@ -179,3 +179,36 @@
   color: red;
   font-family: 'TJFont', sans-serif;
 }
+
+/* Short viewports: tighten guess rows so the grid + input fit without scrolling. */
+@media (max-height: 740px) {
+  .grid-container {
+    gap: 8px;
+  }
+  .flip-card-inner {
+    height: 30px;
+  }
+  .value-cell {
+    height: 30px;
+    font-size: 15px;
+    padding-left: 12px;
+  }
+  .direction-cell {
+    height: 30px;
+  }
+  .price-input-prefix {
+    font-size: 17px;
+    left: 14px;
+  }
+  .price-input {
+    font-size: 17px;
+    padding: 5px 10px 5px 26px;
+  }
+  .submit-button {
+    font-size: 12px;
+    padding: 8px 12px;
+  }
+  .error-message {
+    font-size: 14px;
+  }
+}
