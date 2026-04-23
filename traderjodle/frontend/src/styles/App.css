@@ -61,7 +61,11 @@ body {
   border-width: 9px;
   border-radius: 10px;
 
-  width: fit-content;
+  /* Shrink in flex parents; must have a resolvable width so the title can wrap. */
+  min-width: 0;
+  /* Outer max: 448px image area + 40px L/R padding + 18px L/R border. */
+  width: min(100%, 506px);
+  max-width: min(100%, 506px);
   height: fit-content;
   margin: 0;
   padding: 5px 20px 10px 20px;
@@ -70,12 +74,16 @@ body {
   justify-content: center;
   align-items: center;
   flex-shrink: 0;
+  box-sizing: border-box;
 }
 .item-image-container {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  align-self: stretch;
+  width: 100%;
+  min-width: 0;
   padding-bottom: 10px;
   /* border: 1px solid; */
 }
@@ -92,6 +100,7 @@ body {
   margin-top: 10px;
   padding: 20px;
   width: auto;
+  /* Inner content width is always ≤ 448px when the card is 506px outer. */
   max-width: 100%;
   height: auto;
   max-height: 28vh;
@@ -147,6 +156,13 @@ body {
 .image-item-name-container {
   font-family: 'TJFont', system-ui, sans-serif;
   font-size: 20px;
+  min-width: 0;
+  align-self: stretch;
+  width: 100%;
+  box-sizing: border-box;
+  text-align: center;
+  overflow-wrap: break-word;
+  word-break: break-word;
 }
 @media (max-height: 940px) {
   .item-image,
