@@ -145,6 +145,7 @@ body {
   opacity: 1;
 }
 .image-item-name-container {
+  font-family: 'TJFont', system-ui, sans-serif;
   font-size: 20px;
 }
 @media (max-height: 940px) {
